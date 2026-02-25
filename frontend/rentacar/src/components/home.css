@@ -1,0 +1,134 @@
+* {
+  margin: 0;
+  padding: 0;
+  width:100%;
+  box-sizing: border-box;
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.home-root {
+  background: #ffffff;
+  color: #111827;
+}
+
+/* Header */
+.home-header {
+  height: 70px;
+  padding: 0 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.brand-name {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+
+}
+
+.header-links span {
+  cursor: pointer;
+  font-size: 20px;
+  color: #111111;
+}
+
+.header-links span:hover {
+  color: #111827;
+}
+
+.header-links button {
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  background: #111827;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Hero Section https://as1.ftcdn.net/jpg/02/16/60/42/1000_F_216604243_4yvQhIudgknAWu04Ob7aSOu6BdIfhBNb.webp"*/
+.hero-section {
+  height: 85vh;
+  background-image: url("https://t4.ftcdn.net/jpg/05/93/57/95/360_F_593579577_x1mYpLkJKOTsalnD7tUDupjmDhpXH9lT.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-overlay {
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  padding-left: 80px;
+}
+
+.hero-text {
+  max-width: 620px;
+  color: white;
+}
+
+.hero-text h1 {
+  font-size: 52px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.hero-text p {
+  font-size: 18px;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 32px;
+}
+
+.hero-actions button {
+  padding: 12px 26px;
+  margin-right: 16px;
+  border-radius: 6px;
+  border: none;
+  background: #ffffff;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hero-actions .secondary {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+}
+
+/* Info Section */
+.info-section {
+  padding: 70px 80px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.info-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.info-card p {
+  font-size: 15px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Footer */
+.home-footer {
+  text-align: center;
+  padding: 18px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #6b7280;
+}

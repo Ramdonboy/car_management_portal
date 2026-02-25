@@ -1,0 +1,146 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f5f6fa;
+}
+
+/* Layout */
+.dashboard {
+  min-width: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  width: 100%;
+  height: 60px;
+  background: white;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.logo span {
+  font-size: 12px;
+  background: #e8ebff;
+  padding: 3px 6px;
+  border-radius: 6px;
+  margin-left: 6px;
+}
+
+
+
+.profile {
+  width: 32px;
+  height: 32px;
+  background: #ddd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Content */
+.content {
+  padding: 30px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 20px;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card h4 {
+  color: #555;
+}
+
+.card h2 {
+  margin: 10px 0;
+}
+
+.card p {
+  color: #888;
+}
+
+/* Fleet */
+.fleet {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.fleet h3 {
+  margin-bottom: 15px;
+}
+
+.fleet-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.available {
+  background: #e7f7ee;
+  color: #1b7f4d;
+}
+
+.rented {
+  background: #fdecec;
+  color: #a94442;
+}
+
+/* Progress */
+.progress-group {
+  margin: 12px 0;
+}
+
+.progress-group label {
+  font-size: 14px;
+}
+
+.progress {
+  height: 8px;
+  background: #eee;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.bar {
+  height: 100%;
+  background: #4f6bed;
+}
+
