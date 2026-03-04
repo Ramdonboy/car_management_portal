@@ -5,7 +5,8 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+   const [showPassword, setShowPassword] = useState(false);
+  
   const handleLogin = async (e) => {
     e.preventDefault();
      console.log(email);
@@ -51,12 +52,21 @@ function Login() {
         <label>Email</label>
         <input type="email" placeholder="your@email.com" onChange={(e) => setEmail(e.target.value)  }/>
 
+
         <label>Password</label>
-        <input
-  type="password"
-  placeholder="Enter your password"
-  onChange={(e) => setPassword(e.target.value)}
-/>
+
+        <div className="password-wrapper">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter your password"
+            onChange={(e) => setPassword(e.target.value)}
+          />      <span
+            className="toggle-btn"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? "🙈" : "👁️"}
+          </span>
+        </div>
 
          <button type="submit " onClick={handleLogin}>Sign in</button>
        

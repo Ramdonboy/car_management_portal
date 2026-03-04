@@ -1,3 +1,7 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
 .login-page {
   min-height: 100vh;
   background-color: #eef1f6;
@@ -60,15 +64,46 @@ label {
 input {
   width: 100%;
   padding: 10px;
-  margin: 8px 0 15px;
   border-radius: 8px;
   border: 1px solid #ddd;
   outline: none;
+  box-sizing: border-box;
 }
 
 input:focus {
   border-color: #3b5bfd;
 }
+/* spacing for normal inputs (email etc.) */
+.login-card > input {
+  margin: 8px 0 15px;
+}
+
+/* password wrapper spacing */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 8px 0 15px;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding: 10px;
+  padding-left: 45px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.toggle-btn {
+  position: absolute;
+  left:15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 2;   /* IMPORTANT */
+}
+
 
 .login-btn {
   width: 100%;
