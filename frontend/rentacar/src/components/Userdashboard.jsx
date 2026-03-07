@@ -1,22 +1,23 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./User.css";
 
 function CarsBooking() {
 
   const username = localStorage.getItem("username");
-
+  const navigate = useNavigate();
   const cars = [
     {
       id: 1,
       name: "Toyota Camry",
-      price: 45,
+      price: 4500,
       image: "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=400"
     },
     {
       id: 2,
       name: "BMW X5",
       price: 120,
-      image: "https://images.unsplash.com/photo-1555215695-3004980ad54b?w=400"
+      image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600"
     },
     {
       id: 3,
@@ -32,9 +33,9 @@ function CarsBooking() {
     },
     {
       id: 5,
-      name: "Range Rover",
+      name: "Range Rover Evoque",
       price: 150,
-      image: "https://images.unsplash.com/photo-1549399542-7e82138e2c63?w=400"
+      image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=600"
     },
     {
       id: 6,
@@ -51,14 +52,8 @@ function CarsBooking() {
   return (
     <div className="container">
 
-      {/* Navbar */}
-      <div className="navbar">
-        <h2>🚗 Car Rental</h2>
-        <div>Welcome {username}</div>
-      </div>
-
       {/* Cars Section */}
-      <h2 className="title">Available Cars</h2>
+     
 
       <div className="cars-grid">
         {cars.map((car) => (
@@ -73,50 +68,14 @@ function CarsBooking() {
             <h3>{car.name}</h3>
             <p>${car.price}/day</p>
 
-            <button onClick={() => setSelectedCar(car)}>
-              Book Now
-            </button>
-
+            <button onClick={() => navigate("/booking", { state: { car } })}>
+            Book Now
+       </button>
           </div>
         ))}
       </div>
 
-      {/* Booking Section */}
-      {selectedCar && (
-        <div className="booking-section">
-
-          <h2>Booking Details</h2>
-
-          <img src={selectedCar.image} alt={selectedCar.name} />
-
-          <h3>{selectedCar.name}</h3>
-          <p>${selectedCar.price}/day</p>
-
-          <label>Pickup Date</label>
-          <input
-            type="date"
-            onChange={(e) => setPickup(e.target.value)}
-          />
-
-          <label>Return Date</label>
-          <input
-            type="date"
-            onChange={(e) => setReturnDate(e.target.value)}
-          />
-
-          <div className="summary">
-            <h3>Booking Summary</h3>
-            <p>Car : {selectedCar.name}</p>
-            <p>Pickup : {pickup}</p>
-            <p>Return : {returnDate}</p>
-          </div>
-
-          <button className="confirm-btn">
-            Confirm Booking
-          </button>
-
-        </div>
-      )}
+     
 
     </div>
   );

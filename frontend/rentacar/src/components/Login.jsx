@@ -25,7 +25,7 @@ function Login() {
   if (role === "admin") {
     navigate("/dashboard");
   } else if (role === "user") {
-    navigate("/user");
+    navigate("/userdashboard");
   } else if (role === "owner") {
     navigate("/owner");
   } else {
