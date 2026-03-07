@@ -9,7 +9,7 @@ import Reports from "./components/Reports";
 import Users from "./components/users";
 import Home from "./components/Home";
 import Layout from "./components/Layout";
-
+import Userdashboard from "./components/Userdashboard"
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/Userdashboard" element={<Userdashboard />} />
         <Route element={<Layout/>}>
          <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/cars" element={<Cars/>} />
