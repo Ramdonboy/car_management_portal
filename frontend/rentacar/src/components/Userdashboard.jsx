@@ -29,7 +29,7 @@ function CarsBooking() {
       id: 4,
       name: "Audi A6",
       price: 110,
-      image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400"
+      image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600"
     },
     {
       id: 5,

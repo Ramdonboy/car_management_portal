@@ -13,6 +13,7 @@ import Userdashboard from "./components/Userdashboard";
 import Userlayout from "./components/Userlayout";
 import BookingPage from "./components/Bookingpage";
 import MyBookings from "./components/MyBookings";
+import Myprofile from "./components/Myprofile"; 
 function App() {
   return (
     <Router>
@@ -23,6 +24,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/mybookings" element={<MyBookings />} />
+        <Route path="/myprofile" element={<MyProfile />} />
         <Route element={<Userlayout/>}>
         <Route path="/Userdashboard" element={<Userdashboard />} />
         

@@ -5,7 +5,7 @@ import "./register.css";
 function Register() {
   const navigate = useNavigate();
 
-  const [role, setRole] = useState("user"); // default
+  const [role, setRole] = useState("user");
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -17,18 +17,26 @@ function Register() {
     phone: "",
     password: "",
     confirmPassword: "",
-    rcbook: "null",
-    license: "null",
+    rcbook: null,
+    license: null,
     address: "",
+    place: "",
   });
 
   // HANDLE INPUT CHANGE
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
 
-    setForm({ ...form, [name]: value });
+    // Handle file inputs
+    if (files) {
+      setForm({ ...form, [name]: files[0] });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+
     setErrors({ ...errors, [name]: "" });
 
+    // Password strength check
     if (name === "password") {
       if (value.length < 6) {
         setPasswordStrength("Weak");
@@ -46,7 +54,7 @@ function Register() {
 
     let newErrors = {};
 
-    if (role === "user" && !/^\d{10}$/.test(form.phone)) {
+    if (!/^\d{10}$/.test(form.phone)) {
       newErrors.phone = "Phone number must be 10 digits";
     }
 
@@ -62,12 +70,15 @@ function Register() {
     if (Object.keys(newErrors).length > 0) return;
 
     try {
+      const userId = "user-" + Date.now(); // generate user id
+
       const response = await fetch("http://localhost:5000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
           role: role,
+          userId: userId,
         }),
       });
 
@@ -114,8 +125,8 @@ function Register() {
         </div>
 
         <form onSubmit={handleRegister}>
-          
-          {/* ================= USER FORM ================= */}
+
+          {/* USER FORM */}
           {role === "user" && (
             <>
               <label>Full Name</label>
@@ -151,19 +162,19 @@ function Register() {
             </>
           )}
 
-          {/* ================= OWNER FORM ================= */}
+          {/* OWNER FORM */}
           {role === "owner" && (
             <>
               <label>Full Name</label>
               <input
                 type="text"
                 name="name"
-                value={form.company}
+                value={form.name}
                 onChange={handleChange}
                 required
               />
 
-              <label>Email </label>
+              <label>Email</label>
               <input
                 type="email"
                 name="email"
@@ -172,7 +183,7 @@ function Register() {
                 required
               />
 
-              <label> Address</label>
+              <label>Address</label>
               <input
                 type="text"
                 name="address"
@@ -181,16 +192,16 @@ function Register() {
                 required
               />
 
-              <label>place</label>
+              <label>Place</label>
               <input
-                type="teaxt"
+                type="text"
                 name="place"
                 value={form.place}
                 onChange={handleChange}
                 required
               />
-            
-            <label>Phone</label>
+
+              <label>Phone</label>
               <input
                 type="text"
                 name="phone"
@@ -201,30 +212,28 @@ function Register() {
                 }}
                 required
               />
-              <label>Upload Driving License</label>
-          <input
-            type="file"
-            name="license"
-            accept="image/*"
-            onChange={handleChange}
-          />
-          {errors.license && <p className="error">{errors.license}</p>}
 
-          {/* RC Book Upload */}
-          <label>Upload RC Book</label>
-          <input
-            type="file"
-            name="rcbook"
-            accept="image/*"
-            onChange={handleChange}
-          />
-          {errors.rcbook && <p className="error">{errors.rcbook}</p>}
+              <label>Upload Driving License</label>
+              <input
+                type="file"
+                name="license"
+                accept="image/*"
+                onChange={handleChange}
+              />
+
+              <label>Upload RC Book</label>
+              <input
+                type="file"
+                name="rcbook"
+                accept="image/*"
+                onChange={handleChange}
+              />
 
               {errors.phone && <p className="error">{errors.phone}</p>}
             </>
           )}
 
-          {/* ================= COMMON PASSWORD SECTION ================= */}
+          {/* PASSWORD */}
           <label>Password</label>
           <div className="password-wrapper">
             <input
