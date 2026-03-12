@@ -12,8 +12,8 @@ import Layout from "./components/Layout";
 import Userdashboard from "./components/Userdashboard";
 import Userlayout from "./components/Userlayout";
 import BookingPage from "./components/Bookingpage";
-import MyBookings from "./components/MyBookings";
-import Myprofile from "./components/Myprofile"; 
+import MyProfile from "./components/Myprofile"; // adjust path if needed
+
 function App() {
   return (
     <Router>
@@ -23,11 +23,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/booking" element={<BookingPage />} />
-        <Route path="/mybookings" element={<MyBookings />} />
-        <Route path="/myprofile" element={<MyProfile />} />
         <Route element={<Userlayout/>}>
         <Route path="/Userdashboard" element={<Userdashboard />} />
         
+        <Route path="/Myprofile" element={<MyProfile />} />
         </Route>
         
         <Route element={<Layout/>}>

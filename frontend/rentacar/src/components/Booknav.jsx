@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 
-function Usernav() {
+function Booknav() {
   return (
     <nav className="navbar">
       <div className="logo">🚗 CarRent </div>
@@ -19,5 +19,3 @@ function Usernav() {
     </nav>
   );
 }
-
-export default Usernav;

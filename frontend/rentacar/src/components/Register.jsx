@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./register.css";
 
 function Register() {
@@ -27,7 +28,6 @@ function Register() {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    // Handle file inputs
     if (files) {
       setForm({ ...form, [name]: files[0] });
     } else {
@@ -36,7 +36,7 @@ function Register() {
 
     setErrors({ ...errors, [name]: "" });
 
-    // Password strength check
+    // PASSWORD STRENGTH
     if (name === "password") {
       if (value.length < 6) {
         setPasswordStrength("Weak");
@@ -70,15 +70,12 @@ function Register() {
     if (Object.keys(newErrors).length > 0) return;
 
     try {
-      const userId = "user-" + Date.now(); // generate user id
-
       const response = await fetch("http://localhost:5000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          role: role,
-          userId: userId,
+          role: role
         }),
       });
 
@@ -158,6 +155,7 @@ function Register() {
                 }}
                 required
               />
+
               {errors.phone && <p className="error">{errors.phone}</p>}
             </>
           )}
@@ -244,11 +242,11 @@ function Register() {
               required
             />
             <span
-              className="toggle-btn"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "🙈" : "👁️"}
-            </span>
+      className="toggle-btn"
+            onClick={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? <FaEyeSlash /> : <FaEye />}
+      </span> 
           </div>
 
           {passwordStrength && (
@@ -266,14 +264,12 @@ function Register() {
               onChange={handleChange}
               required
             />
-            <span
-              className="toggle-btn"
-              onClick={() =>
-                setShowConfirmPassword(!showConfirmPassword)
-              }
-            >
-              {showConfirmPassword ? "🙈" : "👁️"}
-            </span>
+           <span
+  className="toggle-btn"
+  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+>
+  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+</span>
           </div>
 
           {errors.confirmPassword && (

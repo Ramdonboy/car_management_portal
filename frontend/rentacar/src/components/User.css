@@ -4,6 +4,8 @@ margin:0;
 padding:0;
 }
 
+/* Container */
+
 .container{
 padding:10px 20px 20px 20px;
 font-family:Arial;
@@ -12,6 +14,7 @@ margin:auto;
 }
 
 /* Title */
+
 .title{
 margin:10px 0 20px 0;
 text-align:center;
@@ -20,6 +23,7 @@ font-weight:bold;
 }
 
 /* Cars Grid */
+
 .cars-grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -27,13 +31,22 @@ gap:20px;
 }
 
 /* Car Card */
+
 .car-card{
 border:1px solid #ddd;
 padding:15px;
 border-radius:10px;
 text-align:center;
 background:white;
+transition:0.2s;
 }
+
+.car-card:hover{
+transform:scale(1.02);
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Car Image */
 
 .car-card img{
 width:100%;
@@ -43,13 +56,19 @@ border-radius:10px;
 cursor:pointer;
 }
 
+/* Car Name */
+
 .car-card h3{
 margin-top:10px;
 }
 
+/* Price */
+
 .car-card p{
 margin:5px 0;
 }
+
+/* Button */
 
 .car-card button{
 margin-top:10px;
@@ -61,15 +80,24 @@ cursor:pointer;
 border-radius:5px;
 }
 
+.car-card button:hover{
+background:#333;
+}
+
 /* Tablet */
+
 @media (max-width:900px){
+
 .cars-grid{
 grid-template-columns:repeat(2,1fr);
 }
+
 }
 
 /* Mobile */
+
 @media (max-width:600px){
+
 .container{
 padding:10px;
 }
@@ -81,10 +109,5 @@ grid-template-columns:1fr;
 .car-card img{
 height:160px;
 }
-}
-.title{
-text-align:center;
-margin-bottom:25px;
-font-size:28px;
-font-weight:bold;
+
 }

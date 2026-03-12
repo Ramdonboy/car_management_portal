@@ -12,7 +12,7 @@ function Cars() {
   fuel: "Petrol",
   transmission: "Automatic",
   seats: 5,
-  price: 45,
+  price: 4500,
   status: "Available",
 },
 {
@@ -24,7 +24,7 @@ function Cars() {
   fuel: "Diesel",
   transmission: "Automatic",
   seats: 5,
-  price: 120,
+  price: 1200,
   status: "Rented",
 },
 
@@ -38,7 +38,7 @@ function Cars() {
       fuel: "Petrol",
       transmission: "Automatic",
       seats: 5,
-      price: 130,
+      price: 1300,
       status: "Available",
     },
       {
@@ -50,7 +50,7 @@ function Cars() {
       fuel: "Petrol",
       transmission: "Automatic",
       seats: 5,
-      price: 110,
+      price: 1100,
       status: "Available",
     },
    {
@@ -62,7 +62,7 @@ function Cars() {
       fuel: "Petrol",
       transmission: "Automatic",
       seats: 5,
-      price: 200,
+      price: 2000,
       status: "Available",
     },
    {
@@ -74,7 +74,7 @@ function Cars() {
   fuel: "Diesel",
   transmission: "Automatic",
   seats: 5,
-  price: 150,
+  price: 1500,
   status: "Available",
 },
   ]);
@@ -217,7 +217,7 @@ function Cars() {
                 <td>{car.fuel}</td>
                 <td>{car.transmission}</td>
                 <td>{car.seats}</td>
-                <td>${car.price}</td>
+                <td>₹{car.price}</td>
                 <td>
                   <span className={car.status === "Available" ? "status available" : "status rented"}>
                     {car.status}

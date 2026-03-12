@@ -3,19 +3,19 @@ import "./reports.css";
 
 function AdminReport() {
   // Sample Data (You can replace with backend data later)
-  const totalRevenue = 1250000;
-  const thisMonthRevenue = 185000;
-  const totalBookings = 320;
-  const thisMonthBookings = 42;
+  const totalRevenue = 0;
+  const thisMonthRevenue = 0;
+  const totalBookings = 0;
+  const thisMonthBookings = 0;
 
   const averageBookingValue = (totalRevenue / totalBookings).toFixed(2);
 
 const topCars = [
-  { name: "Toyota Camry", bookings: 85, revenue: 340000 },
-  { name: "BMW X5", bookings: 72, revenue: 420000 },
-  { name: "Audi A6", bookings: 65, revenue: 390000 },
-  { name: "Porsche Cayenne", bookings: 48, revenue: 510000 },
-  { name: "Range Rover Evoque", bookings: 40, revenue: 460000 },
+  { name: "Toyota Camry", bookings: 0, revenue: 0 },
+  { name: "BMW X5", bookings: 0, revenue: 0 },
+  { name: "Audi A6", bookings: 0, revenue: 0 },
+  { name: "Porsche Cayenne", bookings: 0, revenue: 0 },
+  { name: "Range Rover Evoque", bookings: 0, revenue: 0 },
 ];
 
   return (

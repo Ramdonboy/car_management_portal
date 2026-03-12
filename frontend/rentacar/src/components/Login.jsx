@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import './Login.css'
 function Login() {
   const navigate = useNavigate();
@@ -10,7 +11,11 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
      console.log(email);
-     console.log(password);
+     console.log(password); 
+     if (!email || !password) {
+    alert("Email and Password are required");
+    return;
+  }
     const response = await fetch("http://localhost:5000/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -20,6 +25,7 @@ function Login() {
     const data = await response.json();
     console.log(data)
     if(data.message=="Login successful"){
+      localStorage.setItem("token", data.token);
       const role = data.user.role;
 
   if (role === "admin") {
@@ -64,8 +70,8 @@ function Login() {
             className="toggle-btn"
             onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? "🙈" : "👁️"}
-          </span>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+      </span> 
         </div>
 
          <button type="submit " onClick={handleLogin}>Sign in</button>

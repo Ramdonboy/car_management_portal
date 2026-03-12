@@ -1,12 +1,38 @@
 const express = require("express");
 const cors = require("cors");
 const pool = require("./db");
+const jwt = require("jsonwebtoken");
 
 const app = express();
-
+const SECRET_KEY = "rentacar_secret";
 /* -------- MIDDLEWARE -------- */
 app.use(cors());
 app.use(express.json());
+
+// jwt middleware 
+
+function verifyToken(req, res, next){
+  const authHeader = req.headers.authorization;
+
+  if(!authHeader){
+    return res.status(401).json({message: "Token missing"});
+  }
+
+  const token = authHeader.split(" ")[1];
+  console.log(req.headers.authorization);
+
+  try{
+    const decoded = jwt.verify(token, SECRET_KEY);
+
+    req.userid = decoded.userid;
+
+    next();
+
+  }catch(err){
+    return res.status(401).json({message: "Invalid token"})
+
+  }
+}
 
 /* test for db ios connected proper and working well*/ 
 app.get("/api/test-db", async (req, res) => {
@@ -78,9 +104,19 @@ app.post("/api/login", async (req, res) => {
     if (rows.length === 0) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
+    const user = rows[0];
+
+    // create jwt 
+    const token = jwt.sign(
+      { userid: user.id},
+      SECRET_KEY,
+      { expiresIn: "2d" }
+    );
+
 
     res.json({
       message: "Login successful",
+      token: token,
       user: {
         id: rows[0].id,
         name: rows[0].name,
@@ -94,6 +130,58 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.get("/api/profile", verifyToken, async (req , res) =>{
+  try{
+    const userid = req.userid;
+    const [rows] = await pool.query(
+      "SELECT id, name, email, phone FROM users WHERE id = ?",
+      [userid]
+    );
+
+    if(rows.length === 0){
+      return res.status(404).json({ message: "User not found"});
+    }
+    res.json({
+      id: rows[0].id,
+      name: rows[0].name,
+      email: rows[0].email,
+      phone: rows[0].phone
+    });
+
+
+  }catch{
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+
+  }
+
+} );
+// update profile 
+
+app.put("/api/updateprofile", verifyToken, async (req, res) => {
+  try {
+
+    const userid = req.userid;
+    const { fullName, phone } = req.body;
+
+    if (!fullName || !phone) {
+      return res.status(400).json({ message: "Name and phone required" });
+    }
+
+    await pool.query(
+      "UPDATE users SET name = ?, phone = ? WHERE id = ?",
+      [fullName, phone, userid]
+    );
+
+    res.json({ message: "Profile updated successfully" });
+
+  } catch (err) {
+
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+
+  }
+});
 
 /* -------- SERVER -------- */
 const PORT = 5000;

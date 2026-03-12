@@ -60,10 +60,7 @@ function BookingPage() {
 
   return (
     <div className="container">
-     {/* My Bookings Button */}
-    <button className="mybooking-btn" onClick={() => navigate("/mybookings")}>
-      My Bookings
-    </button>
+    
       {/* Back Button */}
       <button className="back-btn" onClick={() => navigate("/Userdashboard")}>
         ← Back to Cars
@@ -76,7 +73,7 @@ function BookingPage() {
         <img src={car.image} alt={car.name} />
 
         <h3>{car.name}</h3>
-        <p>${car.price} / day</p>
+        <p>{car.price} / day</p>
 
         <label>Pickup Date</label>
         <input
@@ -97,7 +94,7 @@ function BookingPage() {
           <p>Car : {car.name}</p>
           <p>Pickup : {pickup}</p>
           <p>Return : {returnDate}</p>
-          <p><b>Total Price : ${calculateTotal()}</b></p>
+          <p><b>Total Price : {calculateTotal()}</b></p>
         </div>
 
         <button
