@@ -22,7 +22,9 @@ function Navbar() {
         <li>
           <NavLink to="/reports">Reports</NavLink>
         </li>
-        
+        <li>
+            <NavLink to="/">Logout</NavLink>
+          </li>
       </ul>
     </nav>
   );

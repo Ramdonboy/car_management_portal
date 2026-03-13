@@ -245,7 +245,8 @@ function Register() {
       className="toggle-btn"
             onClick={() => setShowPassword(!showPassword)}
       >
-        {showPassword ? <FaEyeSlash /> : <FaEye />}
+        {showPassword ? <FaEye /> : <FaEyeSlash />}
+
       </span> 
           </div>
 
@@ -268,7 +269,8 @@ function Register() {
   className="toggle-btn"
   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
 >
-  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+  {showPassword ? <FaEye /> : <FaEyeSlash />}
+
 </span>
           </div>
 

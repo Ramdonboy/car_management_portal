@@ -1,0 +1,19 @@
+.owner-dashboard{
+text-align:center;
+padding:40px;
+}
+
+.owner-menu{
+display:flex;
+justify-content:center;
+gap:30px;
+margin-top:30px;
+}
+
+.owner-menu a{
+padding:10px 20px;
+background:#010a13;
+color:white;
+text-decoration:none;
+border-radius:5px;
+}

@@ -183,6 +183,54 @@ app.put("/api/updateprofile", verifyToken, async (req, res) => {
   }
 });
 
+//view car details for owner
+
+app.get("/api/view/owner/car"), verifyToken, async (req, res)=>{
+  try{
+    const userid = req.userid;
+
+    const [rows] =  await pool.query(
+      "SELECT * FROM cars WHERE owner_id = ? ",[userid]
+    );
+
+    if (rows.length === 0) return res.status(404).json({ message: "No owner found" });
+
+    res.json(rows);
+
+
+  }catch(err){
+    console.error(err);
+    res.status(500).json({ message: "server error "})
+  }
+}
+// owner add car
+
+app.post("/api/add/car", verifyToken, async (req, res)=>{
+
+  try{
+    const userid = req.userid;
+    const { reg_number ,name, type, fuel, transmission, seats, price_per_day, status, image } = req.body;
+    const [existing] = await pool.query(
+      "SELECT * FROM cars WHERE reg_number = ?",
+      [reg_number]
+    );
+
+    if (existing.length > 0) {
+      return res.status(400).json({ message: "car already exists" });
+    }
+
+    await pool.query(
+  "INSERT INTO cars (reg_number , name, type, transmission, seats, price_per_day, status, image) VALUES (?, ?, ?, ?, ?, ?, ?)",
+  [reg_number , name, type, fuel, transmission, seats, price_per_day, status, image, "cars"]
+);
+
+
+  }catch(err){
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+})
+
 /* -------- SERVER -------- */
 const PORT = 5000;
 

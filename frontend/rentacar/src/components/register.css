@@ -10,18 +10,19 @@ font-family:"Segoe UI",Tahoma,sans-serif;
 body{
 background:#f2f4f7;
 min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
+padding-top:40px;
 }
+
 
 /* Container */
 
 .container{
 width:100%;
-padding: 50px;
-max-width:40%;
+max-width:600px;
+margin:0 auto;
+padding:20px;
 }
+
 
 /* Main Title */
 
@@ -45,11 +46,12 @@ font-size:14px;
 
 .card{
 background:#fff;
-padding: 50px;
+padding:30px;
 border-radius:10px;
-text-align:left;
 box-shadow:0 6px 16px rgba(0,0,0,0.08);
+width:100%;
 }
+
 
 /* Card Title */
 
@@ -189,9 +191,11 @@ color:green;
 
 .role-selector{
 display:flex;
-justify-content:space-between;
-margin-bottom:15px;
+justify-content:center;
+gap:80px;
+margin-bottom:20px;
 }
+
 
 .role-selector label{
 display:flex;
@@ -246,9 +250,10 @@ font-size:24px;
 }
 
 .role-selector{
-flex-direction:column;
-gap:10px;
-align-items:flex-start;
+display:flex;
+justify-content:center;
+gap:80px;
+margin-bottom:20px;
 }
 
 }

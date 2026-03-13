@@ -70,7 +70,8 @@ function Login() {
             className="toggle-btn"
             onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+            {showPassword ? <FaEye /> : <FaEyeSlash />}
+
       </span> 
         </div>
 

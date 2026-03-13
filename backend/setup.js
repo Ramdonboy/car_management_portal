@@ -59,6 +59,7 @@ async function setup() {
       CREATE TABLE IF NOT EXISTS cars (
         car_id INT AUTO_INCREMENT PRIMARY KEY,
         owner_id INT NOT NULL,
+        reg_number INT NOT NULL UNIQUE,
         name VARCHAR(100) NOT NULL,
         type VARCHAR(50),
         fuel VARCHAR(20),

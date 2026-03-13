@@ -1,0 +1,62 @@
+.accepted-container{
+padding:40px;
+}
+
+.accepted-card{
+background:white;
+padding:20px;
+width:350px;
+border-radius:8px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+margin-top:20px;
+}
+
+.accepted-card p{
+margin:6px 0;
+}
+
+.btns{
+display:flex;
+gap:10px;
+margin-top:12px;
+}
+
+.accept-btn{
+background:#19e248;
+color:white;
+border:none;
+padding:6px 14px;
+border-radius:5px;
+cursor:pointer;
+font-size:14px;
+}
+
+.reject-btn{
+background:#e51b30;
+color:white;
+border:none;
+padding:6px 14px;
+border-radius:5px;
+cursor:pointer;
+font-size:14px;
+}
+
+.accept-btn:hover{
+background:#0ce33a;
+}
+
+.reject-btn:hover{
+background:#e3091f;
+}
+.success{
+color: green;
+font-weight: bold;
+margin-top: 10px;
+font-size: 15px;
+}
+.rejected{
+color: rgb(249, 14, 14);
+font-weight: bold;
+margin-top: 10px;
+font-size: 15px;
+}
