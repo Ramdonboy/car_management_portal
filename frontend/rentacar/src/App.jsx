@@ -11,7 +11,7 @@ import Cars from "./components/Cars";
 import Bookings from "./components/Bookings";
 import Reports from "./components/Reports";
 import Users from "./components/users";
-
+import Ownersrequest from "./components/ownersrequest";
 /* USER */
 import Userlayout from "./components/Userlayout";
 import Userdashboard from "./components/Userdashboard";
@@ -22,7 +22,7 @@ import MyProfile from "./components/Myprofile";
 import Ownerlayout from "./components/Ownerlayout";
 import Ownerdashboard from "./components/Ownerdashboard";
 import AddCar from "./components/Addcar";
-import Ownercars from "./components/ownercars";
+import Ownercars from "./components/Ownercars";
 import Acceptingrequest from "./components/Acceptingrequest";
 
 function App() {
@@ -45,12 +45,13 @@ function App() {
 
         {/* ADMIN ROUTES */}
         <Route element={<Layout />}>
-          <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/cars" element={<Cars />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/users" element={<Users />} />
           <Route path="/bookings" element={<Bookings />} />
+          <Route path="/ownersrequest" element={<Ownersrequest />} />
         </Route>
+        <Route path="/dashboard" element={<AdminDashboard />} />
 
         {/* OWNER ROUTES */}
         <Route element={<Ownerlayout />}>

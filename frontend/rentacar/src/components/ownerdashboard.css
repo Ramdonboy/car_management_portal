@@ -1,19 +1,80 @@
-.owner-dashboard{
-text-align:center;
-padding:40px;
+/* Dashboard Container */
+.owner-dashboard {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    font-family: "Segoe UI", sans-serif;
 }
 
-.owner-menu{
-display:flex;
-justify-content:center;
-gap:30px;
-margin-top:30px;
+/* Heading */
+.-dashboard h1 {
+    color: white;
+    font-size: 36px;
+    margin-bottom: 50px;
+    text-align: center;
 }
 
-.owner-menu a{
-padding:10px 20px;
-background:#010a13;
-color:white;
-text-decoration:none;
-border-radius:5px;
+/* Menu Container */
+.owner-menu {
+    display: flex;
+    flex-wrap: wrap; /* allows buttons to wrap on small screens */
+    justify-content: center;
+    padding: 40px;
+    gap: 20px; /* space between buttons */
+    width: 100%;
+    max-width: 900px; /* limit width for large screens */
+}
+
+/* Menu Links */
+.owner-menu a {
+    flex: 0 1 200px; /* flexible, but minimum 200px */
+    text-align: center;
+    padding: 15px 25px;
+    background: white;
+    color: #080a0a;
+    
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover Effect */
+.owner-menu a:hover {
+    background: #060847;
+    color: white;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Small screens */
+@media (max-width: 768px) {
+    .owner-menu {
+        flex-direction: column; /* stack vertically */
+        align-items: center;
+    }
+
+    .owner-menu a {
+        width: 80%; /* fill most of the screen */
+        max-width: 300px;
+        margin-bottom: 15px;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .Admin-dashboard h1 {
+        font-size: 28px;
+    }
+
+    .owner-menu a {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
 }

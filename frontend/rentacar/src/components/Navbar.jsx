@@ -7,9 +7,7 @@ function Navbar() {
       <div className="logo">🚗 CarRent Admin</div>
 
       <ul className="nav-links">
-        <li>
-          <NavLink to="/dashboard">Dashboard</NavLink>
-        </li>
+        
         <li>
           <NavLink to="/cars">Cars</NavLink>
         </li>

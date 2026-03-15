@@ -12,8 +12,11 @@ function Usernav() {
         </li>
         <li>
           <NavLink to="/Myprofile">My Profile</NavLink>
+
         </li>
-        
+        <li>
+            <NavLink to="/">Logout</NavLink>
+          </li>
         
       </ul>
     </nav>

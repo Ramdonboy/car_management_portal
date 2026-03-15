@@ -9,38 +9,50 @@ function Login() {
    const [showPassword, setShowPassword] = useState(false);
   
   const handleLogin = async (e) => {
-    e.preventDefault();
-     console.log(email);
-     console.log(password); 
-     if (!email || !password) {
+  e.preventDefault();
+
+  if (!email || !password) {
     alert("Email and Password are required");
     return;
   }
-    const response = await fetch("http://localhost:5000/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
 
-    const data = await response.json();
-    const status = data.user.status;
-    if(status != "approved"){
-       return alert("under admin verification. please wait");
-    }
-    console.log(data)
-    if(data.message=="Login successful"){
-      localStorage.setItem("token", data.token);
-      const role = data.user.role;
+  const response = await fetch("http://localhost:5000/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
 
-  if (role === "admin") {
-    navigate("/dashboard");
-  } else if (role === "user") {
-    navigate("/userdashboard");
-  } else if (role === "owner") {
-    navigate("/ownerdashboard");
-  } else {
-    alert("Unknown role");
+  const data = await response.json();
+
+  //  If login failed
+  if (data.message === "Invalid credentials") {
+    alert("Email or Password is wrong");
+    return;
   }
+
+  const status = data.user.status;
+
+  if (status !== "approved") {
+    alert("Under admin verification. Please wait");
+    return;
+  }
+
+  //  If login successful
+  if (data.message === "Login successful") {
+
+    localStorage.setItem("token", data.token);
+    const role = data.user.role;
+
+    if (role === "admin") {
+      navigate("/dashboard");
+    } else if (role === "user") {
+      navigate("/userdashboard");
+    } else if (role === "owner") {
+      navigate("/ownerdashboard");
+    } else {
+      alert("Unknown role");
+    }
+  
     }
     alert(data.message);
   };

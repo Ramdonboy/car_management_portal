@@ -1,7 +1,7 @@
 .navbar {
   display: flex;
 
-  background-color: #ff6600;
+  background-color: #02011c;
   padding: 15px 40px;
   
   position: absolute;
@@ -11,12 +11,14 @@
 
 .logo {
   font-size: 22px;
+  color: white;
   font-weight: bold;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
+  color: rgb(18, 18, 18);
   gap: 25px;
 }
 
@@ -28,11 +30,11 @@
 }
 
 .nav-links a:hover {
-  color: #00010b;
+  color: #f4f4f8;
 }
 
 .nav-links a.active {
-  color: #060a36;
-  border-bottom: 2px solid #060a36;
+  color: #e2e2ed;
+  border-bottom: 2px solid #e6e7ee;
   padding-bottom: 4px;
 }

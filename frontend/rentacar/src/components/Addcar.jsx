@@ -42,7 +42,7 @@ const token = localStorage.getItem("token");
 const formData = new FormData();
 
 formData.append("name",car.name);
-formData.append("model",car.model);
+formData.append("type", car.type);
 formData.append("fuel",car.fuel);
 formData.append("transmission",car.transmission);
 formData.append("seats",car.seats);
@@ -123,7 +123,7 @@ placeholder="Price per day"
 onChange={handleChange}
 />
 <input
-name="Availability"
+name="status"
 placeholder="status"
 onChange={handleChange}
 />

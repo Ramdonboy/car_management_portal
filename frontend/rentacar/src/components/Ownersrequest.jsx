@@ -1,7 +1,7 @@
 import { useState } from "react";
-import "./acceptingrequest.css";
+import "./ownersrequest.css";
 
-function UserRequest() {
+function OwnerRequest() {
 
   const [requests, setRequests] = useState([
     {
@@ -38,13 +38,13 @@ function UserRequest() {
 
   return (
     <div className="request-container">
-      <h2>User Requests</h2>
+      <h2>Owner Registration Requests</h2>
 
       <div className="request-table">
         <table>
           <thead>
             <tr>
-              <th>Id</th>
+              <th>ID</th>
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
@@ -95,4 +95,4 @@ function UserRequest() {
   );
 }
 
-export default UserRequest;
+export default OwnerRequest;
