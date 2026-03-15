@@ -18,8 +18,8 @@ function Register() {
     phone: "",
     password: "",
     confirmPassword: "",
-    rcbook: null,
-    license: null,
+    rcbook: "",
+    license: "",
     address: "",
     place: "",
   });
@@ -50,45 +50,79 @@ function Register() {
 
   // HANDLE REGISTER
   const handleRegister = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    let newErrors = {};
+  let newErrors = {};
 
-    if (!/^\d{10}$/.test(form.phone)) {
-      newErrors.phone = "Phone number must be 10 digits";
-    }
+  if (!/^\d{10}$/.test(form.phone)) {
+    newErrors.phone = "Phone number must be 10 digits";
+  }
 
-    if (passwordStrength === "Weak") {
-      newErrors.password = "Password is too weak";
-    }
+  if (passwordStrength === "Weak") {
+    newErrors.password = "Password is too weak";
+  }
 
-    if (form.password !== form.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
+  if (form.password !== form.confirmPassword) {
+    newErrors.confirmPassword = "Passwords do not match";
+  }
 
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
+  setErrors(newErrors);
+  if (Object.keys(newErrors).length > 0) return;
 
-    try {
-      const response = await fetch("http://localhost:5000/api/register", {
+  try {
+
+    let response;
+
+    // ---------------- USER REGISTER ----------------
+    if (role === "user") {
+
+      response = await fetch("http://localhost:5000/api/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
-          ...form,
-          role: role
-        }),
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          password: form.password
+        })
       });
 
-      const data = await response.json();
-      alert(data.message);
-
-      if (response.ok) {
-        navigate("/login");
-      }
-    } catch (error) {
-      alert("Backend server not running");
     }
-  };
+
+    // ---------------- OWNER REGISTER ----------------
+    else {
+
+      const formData = new FormData();
+
+      formData.append("name", form.name);
+      formData.append("email", form.email);
+      formData.append("phone", form.phone);
+      formData.append("address", form.address);
+      formData.append("place", form.place);
+      formData.append("password", form.password);
+      formData.append("license", form.license);
+
+      response = await fetch("http://localhost:5000/api/register/owner", {
+        method: "POST",
+        body: formData
+      });
+
+    }
+
+    const data = await response.json();
+    alert(data.message);
+
+    if (response.ok) {
+      navigate("/login");
+    }
+
+  } catch (error) {
+    alert("Backend server not running");
+  }
+};
+
 
   return (
     <div className="container">
@@ -219,13 +253,7 @@ function Register() {
                 onChange={handleChange}
               />
 
-              <label>Upload RC Book</label>
-              <input
-                type="file"
-                name="rcbook"
-                accept="image/*"
-                onChange={handleChange}
-              />
+              
 
               {errors.phone && <p className="error">{errors.phone}</p>}
             </>
@@ -245,7 +273,7 @@ function Register() {
       className="toggle-btn"
             onClick={() => setShowPassword(!showPassword)}
       >
-        {showPassword ? <FaEye /> : <FaEyeSlash />}
+        {showPassword ? <FaEye size={15} /> : <FaEyeSlash size={15}/>}
 
       </span> 
           </div>
@@ -269,7 +297,7 @@ function Register() {
   className="toggle-btn"
   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
 >
-  {showPassword ? <FaEye /> : <FaEyeSlash />}
+  {showPassword ? <FaEye size={15} /> : <FaEyeSlash size={15}/>}
 
 </span>
           </div>

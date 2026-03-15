@@ -23,6 +23,10 @@ function Login() {
     });
 
     const data = await response.json();
+    const status = data.user.status;
+    if(status != "approved"){
+       return alert("under admin verification. please wait");
+    }
     console.log(data)
     if(data.message=="Login successful"){
       localStorage.setItem("token", data.token);
@@ -33,7 +37,7 @@ function Login() {
   } else if (role === "user") {
     navigate("/userdashboard");
   } else if (role === "owner") {
-    navigate("/owner");
+    navigate("/ownerdashboard");
   } else {
     alert("Unknown role");
   }

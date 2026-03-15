@@ -1,27 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ownercars.css";
 
 function MyCars() {
 
-const [cars,setCars] = useState([
-{
-car_id:1,
-name:"Swift",
-price:1500,
-fuel:"Petrol",
-year:"2000",
-seats:5,
-image:"https://via.placeholder.com/200"
-},
-{
-car_id:2,
-name:"Innova",
-price:2500,
-fuel:"Diesel",
-seats:7,
-image:"https://via.placeholder.com/200"
-}
-]);
+const [cars, setCars] = useState([]);
+
+useEffect(() => {
+
+  const fetchCars = async () => {
+
+    try {
+
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:5000/api/view/owner/cars", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+      setCars(data);
+
+    } catch (err) {
+      console.error("Error fetching cars:", err);
+    }
+
+  };
+
+  fetchCars();
+
+}, []);
+
+
 
 const [editingId,setEditingId] = useState(null);
 
@@ -71,7 +82,10 @@ return(
 {cars.map((car)=>(
 <div className="car-card" key={car.car_id}>
 
-<img src={car.image} alt="car"/>
+<img
+src={`http://localhost:5000/uploads/car_image/${car.Image}`}
+alt="car"
+/>
 
 {editingId === car.car_id ? (
 
@@ -96,7 +110,7 @@ onChange={(e)=>handleChange(e,car.car_id)}
 
 <input
 name="price"
-value={car.price}
+value={car.price_per_day}
 onChange={(e)=>handleChange(e,car.car_id)}
 />
 <input
@@ -119,8 +133,7 @@ onChange={(e)=>handleImageChange(e,car.car_id)}
 <h3>{car.name}</h3>
 <p>Fuel: {car.fuel}</p>
 <p>Seats: {car.seats}</p>
-<p>Price: ₹{car.price}/day</p>
-<p>year: {car.year}</p>
+<p>Price: ₹{car.price_per_day}/day</p>
 <button onClick={()=>startEdit(car.car_id)}>Edit</button>
 <button onClick={()=>deleteCar(car.car_id)}>Delete</button>
 </>

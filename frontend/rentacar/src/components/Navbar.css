@@ -1,11 +1,10 @@
 .navbar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #060a36;
+
+  background-color: #ff6600;
   padding: 15px 40px;
   
-  position: sticky;
+  position: absolute;
   top: 0;
   z-index: 1000;
 }

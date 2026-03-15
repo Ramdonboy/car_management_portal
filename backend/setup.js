@@ -18,39 +18,39 @@ async function setup() {
   try {
 
     const connection = await mysql.createConnection(config);
-    console.log("✅ Connected to MySQL server...");
+    console.log("Connected to MySQL server...");
 
     // 1️⃣ Create Database
-    await connection.query(`CREATE DATABASE IF NOT EXISTS car_management_system`);
-    console.log("✅ Database 'car_management_system' created or already exists.");
+    await connection.query(`CREATE DATABASE IF NOT EXISTS car_management`);
+    console.log("Database 'car_management' created or already exists.");
 
     // 2️⃣ Use Database
-    await connection.query(`USE car_management_system`);
+    await connection.query(`USE car_management`);
 
     console.log("Creating tables...");
 
     // USERS TABLE
     await connection.query(`
       CREATE TABLE IF NOT EXISTS users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(50) NOT NULL,
-        email VARCHAR(100) NOT NULL UNIQUE,
-        phone VARCHAR(15),
-        password VARCHAR(255) NOT NULL,
-        role ENUM('admin','owner','user') NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(15) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin','owner','user') NOT NULL,
+    status ENUM('pending','approved','rejected') Default 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
     // OWNERS TABLE
     await connection.query(`
-      CREATE TABLE IF NOT EXISTS owners (
-        owner_id INT PRIMARY KEY,
-        place VARCHAR(100),
-        license_image VARCHAR(255) NOT NULL,
-        rc_book_image VARCHAR(255) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
+     CREATE TABLE IF NOT EXISTS owners (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    owner_id INT NOT NULL,
+    address VARCHAR(100) NOT NULL,
+    license_image VARCHAR(255) NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
       )
     `);
 
@@ -67,7 +67,8 @@ async function setup() {
         seats INT,
         price_per_day DECIMAL(10,2),
         status ENUM('available','rented','maintenance') DEFAULT 'available',
-        image VARCHAR(255),
+        image_ VARCHAR(255),
+        rc_book VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
       )

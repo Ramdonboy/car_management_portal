@@ -48,8 +48,9 @@ font-size:14px;
 background:#fff;
 padding:30px;
 border-radius:10px;
+margin: auto;
 box-shadow:0 6px 16px rgba(0,0,0,0.08);
-width:100%;
+width:50%;
 }
 
 
@@ -152,6 +153,8 @@ background:#d9dcde;
 /* Eye icon */
 
 .toggle-btn{
+    
+    max-width: 40px;
 position:absolute;
 right:12px;
 top:50%;
