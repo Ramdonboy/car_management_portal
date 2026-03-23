@@ -18,46 +18,51 @@ function BookingPage() {
   }
 
   /* Calculate total price */
-  const calculateTotal = () => {
+ const calculateTotal = () => {
 
-    if (!pickup || !returnDate) return 0;
+  if (!pickup || !returnDate) return 0;
 
-    const start = new Date(pickup);
-    const end = new Date(returnDate);
+  const start = new Date(pickup);
+  const end = new Date(returnDate);
 
-    const days = (end - start) / (1000 * 60 * 60 * 24);
+  const timeDiff = end - start;
 
-    if (days <= 0) return 0;
+  const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
-    return days * car.price;
-  };
+  if (days <= 0) return 0;
+
+  return days * car.price_per_day; // 
+};
 
   /* Booking Confirmation */
-  const handleBooking = () => {
+ const handleBooking = async () => {
 
   if (!pickup || !returnDate) {
-    alert("Please select pickup and return date");
+    alert("Select dates");
     return;
   }
 
-  const booking = {
-    carName: car.name,
-    image: car.image,
-    pickup,
-    returnDate,
-    total: calculateTotal()
-  };
+  const token = localStorage.getItem("token");
 
-  const existingBookings =
-    JSON.parse(localStorage.getItem("bookings")) || [];
+  const res = await fetch("http://localhost:5000/api/book-car", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      car_id: car.car_id,
+      owner_id: car.owner_id,
+      pickup: pickup,
+      returnDate: returnDate,
+      total: calculateTotal()
+    })
+  });
 
-  existingBookings.push(booking);
+  const data = await res.json();
 
-  localStorage.setItem("bookings", JSON.stringify(existingBookings));
-
-  setMessage("✅ Booking Confirmed Successfully!");
+  setMessage(data.message);
 };
-
   return (
     <div className="container">
     
@@ -70,17 +75,21 @@ function BookingPage() {
 
         <h2>Booking Details</h2>
 
-        <img src={car.image} alt={car.name} />
+        <img
+  src={`http://localhost:5000/uploads/car_image/${car.image}`}
+  alt={car.name}
+/>
 
         <h3>{car.name}</h3>
-        <p>{car.price} / day</p>
+        <p>₹{car.price_per_day} / day</p>
 
         <label>Pickup Date</label>
         <input
-          type="date"
-          value={pickup}
-          onChange={(e) => setPickup(e.target.value)}
-        />
+           type="date"
+           value={pickup}
+           min={new Date().toISOString().split("T")[0]}
+           onChange={(e) => setPickup(e.target.value)}
+/>
 
         <label>Return Date</label>
         <input

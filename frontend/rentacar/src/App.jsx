@@ -11,12 +11,13 @@ import Cars from "./components/Cars";
 import Bookings from "./components/Bookings";
 import Reports from "./components/Reports";
 import Users from "./components/users";
-import Ownersrequest from "./components/ownersrequest";
+import Ownersrequest from "./components/Ownersrequest";
 /* USER */
 import Userlayout from "./components/Userlayout";
 import Userdashboard from "./components/Userdashboard";
 import BookingPage from "./components/Bookingpage";
 import MyProfile from "./components/Myprofile";
+import Userbookhistory from "./components/Userbookhistory";
 
 /* OWNER */
 import Ownerlayout from "./components/Ownerlayout";
@@ -41,6 +42,7 @@ function App() {
         <Route element={<Userlayout />}>
           <Route path="/userdashboard" element={<Userdashboard />} />
           <Route path="/myprofile" element={<MyProfile />} />
+          <Route path="/mybookings" element={<Userbookhistory />} />
         </Route>
 
         {/* ADMIN ROUTES */}

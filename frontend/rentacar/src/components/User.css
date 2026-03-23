@@ -9,6 +9,7 @@ padding:0;
 .container{
 
 font-family:Arial;
+ padding: 20px;
 max-width:1600px;
 margin:auto;
 }

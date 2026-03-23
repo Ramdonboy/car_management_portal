@@ -1,81 +1,70 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./User.css";
 
 function CarsBooking() {
-
-  const username = localStorage.getItem("username");
   const navigate = useNavigate();
-  const cars = [
-    {
-      id: 1,
-      name: "Toyota Camry",
-      price: 4500,
-      image: "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=400"
-    },
-    {
-      id: 2,
-      name: "BMW X5",
-      price: 1200,
-      image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600"
-    },
-    {
-      id: 3,
-      name: "Mercedes GLC",
-      price: 1300,
-      image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400"
-    },
-    {
-      id: 4,
-      name: "Audi A6",
-      price: 1100,
-      image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600"
-    },
-    {
-      id: 5,
-      name: "Range Rover Evoque",
-      price: 1500,
-      image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=600"
-    },
-    {
-      id: 6,
-      name: "Porsche Cayenne",
-      price: 2000,
-      image: "https://images.unsplash.com/photo-1611821064430-0d40291d0f0b?w=400"
-    }
-  ];
 
+  const [cars, setCars] = useState([]);
   const [selectedCar, setSelectedCar] = useState(null);
-  const [pickup, setPickup] = useState("");
-  const [returnDate, setReturnDate] = useState("");
+
+useEffect(() => {
+  const fetchCars = () => {
+    fetch("http://localhost:5000/api/view/car")
+      .then((res) => res.json())
+      .then((data) => setCars(data));
+  };
+
+  fetchCars();
+
+  const interval = setInterval(fetchCars, 3000); // auto refresh
+
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <div className="container">
 
-      {/* Cars Section */}
-     
+      <h2>Available Cars</h2>
 
       <div className="cars-grid">
         {cars.map((car) => (
-          <div className="car-card" key={car.id}>
+          <div className="car-card" key={car.car_id}>
 
             <img
-              src={car.image}
+              src={`http://localhost:5000/uploads/car_image/${car.image}`}
               alt={car.name}
               onClick={() => setSelectedCar(car)}
             />
 
             <h3>{car.name}</h3>
-            <p>₹{car.price}/day</p>
+            <p>₹{car.price_per_day}/day</p>
 
-            <button onClick={() => navigate("/booking", { state: { car } })}>
+            {/* UPDATED BUTTON LOGIC */}
+       {car.status === "booked" ? (
+          <button
+            disabled
+            style={{
+              backgroundColor: "gray",
+              cursor: "not-allowed",
+              opacity: 0.6
+            }}
+          >
+            Already Booked
+          </button>
+        ) : (
+          <button
+            onClick={() =>
+              navigate("/booking", { state: { car: car } })
+            }
+          >
             Book Now
-       </button>
+          </button>
+        )}
+
           </div>
         ))}
       </div>
-
-     
 
     </div>
   );

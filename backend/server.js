@@ -206,6 +206,166 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+// -------User Booking--------
+app.post("/api/book-car", verifyToken, async (req, res) => {
+  try {
+    const userId = req.userid;
+    const { car_id, owner_id, pickup, returnDate, total } = req.body;
+
+    //  Check car status
+    const [car] = await pool.query(
+      "SELECT status FROM cars WHERE car_id=?",
+      [car_id]
+    );
+
+    if (car[0].status === "booked") {
+      return res.status(400).json({
+        message: "Car already booked"
+      });
+    }
+
+    //  Check accepted booking
+    const [existing] = await pool.query(
+      "SELECT * FROM bookings WHERE car_id=? AND status='accepted'",
+      [car_id]
+    );
+
+    if (existing.length > 0) {
+      return res.status(400).json({
+        message: "Car already booked"
+      });
+    }
+
+    await pool.query(
+      `INSERT INTO bookings 
+      (user_id, car_id, owner_id, pickup_date, return_date, total_price, status)
+      VALUES (?,?,?,?,?,?,?)`,
+      [userId, car_id, owner_id, pickup, returnDate, total, "pending"]
+    );
+
+    res.json({ message: "Booking request sent" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ---------Owner View Bookings----------
+app.get("/api/owner/bookings", verifyToken, async (req, res) => {
+  try {
+    const ownerId = req.userid;
+
+    const [rows] = await pool.query(
+      `SELECT b.*, u.name AS user_name, c.name AS car_name
+       FROM bookings b
+       JOIN users u ON b.user_id = u.id
+       JOIN cars c ON b.car_id = c.car_id
+       WHERE c.owner_id = ?`,
+      [ownerId]
+    );
+
+    res.json(rows);
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+//------Accept/Reject Bookings---------
+app.put("/api/booking/status/:id", verifyToken, async (req, res) => {
+  try {
+    const bookingId = req.params.id;
+    const { status } = req.body;
+
+    const [rows] = await pool.query(
+      "SELECT car_id FROM bookings WHERE booking_id=?",
+      [bookingId]
+    );
+
+    const carId = rows[0].car_id;
+
+    console.log("Booking ID:", bookingId);
+    console.log("Car ID:", carId);
+    console.log("Status:", status);
+
+    await pool.query(
+      "UPDATE bookings SET status=? WHERE booking_id=?",
+      [status, bookingId]
+    );
+
+    if (status === "accepted") {
+      console.log("Updating car to BOOKED...");
+      await pool.query(
+        "UPDATE cars SET status='booked' WHERE car_id=?",
+        [carId]
+      );
+    }
+
+    res.json({ message: "Status updated" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+//---------User View Bookkings---------
+app.get("/api/user/bookings", verifyToken, async (req, res) => {
+  try {
+    const userId = req.userid;
+
+    const [rows] = await pool.query(
+      `SELECT b.*, c.name AS car_name, c.image
+       FROM bookings b
+       JOIN cars c ON b.car_id = c.car_id
+       WHERE b.user_id=?`,
+      [userId]
+    );
+
+    res.json(rows);
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+// --------- USER CANCEL BOOKING ---------
+app.put("/api/booking/cancel/:id", verifyToken, async (req, res) => {
+  try {
+    const bookingId = req.params.id;
+    const userId = req.userid;
+
+    const [rows] = await pool.query(
+      "SELECT * FROM bookings WHERE booking_id=? AND user_id=?",
+      [bookingId, userId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    const carId = rows[0].car_id;
+
+    if (rows[0].status !== "pending") {
+      return res.json({ message: "Cannot cancel now" });
+    }
+
+    await pool.query(
+      "UPDATE bookings SET status=? WHERE booking_id=?",
+      ["cancelled", bookingId]
+    );
+
+    //  Make car available again
+    await pool.query(
+      "UPDATE cars SET status=? WHERE car_id=?",
+      ["available", carId]
+    );
+
+    res.json({ message: "Booking cancelled" });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 /* -------- PROFILE -------- */
 
 app.get("/api/profile", verifyToken, async (req, res) => {

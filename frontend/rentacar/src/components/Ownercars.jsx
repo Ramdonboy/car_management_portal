@@ -37,14 +37,61 @@ useEffect(() => {
 const [editingId,setEditingId] = useState(null);
 
 /* Delete car */
-const deleteCar = (id) =>{
-const updatedCars = cars.filter(car => car.car_id !== id);
-setCars(updatedCars);
+const deleteCar = async (id) => {
+  const token = localStorage.getItem("token");
+
+  console.log("TOKEN:", token);
+  console.log("Deleting car:", id);
+
+  try {
+    const res = await fetch(`http://localhost:5000/delete-car/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+    console.log("Response:", data);
+
+    if (data.message === "Car deleted successfully") {
+      setCars(prev => prev.filter(car => car.car_id !== id));
+    } else {
+      alert(data.message); // 🔥 VERY IMPORTANT
+    }
+
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 /* Start edit */
-const startEdit = (id)=>{
-setEditingId(id);
+const saveEdit = async (car) => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await fetch(`http://localhost:5000/update-car/${car.car_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        name: car.name,
+        fuel: car.fuel,
+        seats: car.seats,
+        price_per_day: car.price_per_day
+      })
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    setEditingId(null);
+
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 /* Handle input change */
@@ -67,8 +114,8 @@ car.car_id === id ? {...car,image:imageURL} : car
 };
 
 /* Save edit */
-const saveEdit = ()=>{
-setEditingId(null);
+const startEdit = (id) => {
+  setEditingId(id);
 };
 
 return(
@@ -83,7 +130,7 @@ return(
 <div className="car-card" key={car.car_id}>
 
 <img
-src={`http://localhost:5000/uploads/car_image/${car.Image}`}
+src={`http://localhost:5000/uploads/car_image/${car.image}`}
 alt="car"
 />
 
@@ -92,38 +139,38 @@ alt="car"
 <>
 <input
 name="name"
+placeholder="name"
 value={car.name}
 onChange={(e)=>handleChange(e,car.car_id)}
 />
 
 <input
 name="fuel"
+placeholder="fuel"
 value={car.fuel}
 onChange={(e)=>handleChange(e,car.car_id)}
 />
 
 <input
 name="seats"
+placeholder="seats"
 value={car.seats}
 onChange={(e)=>handleChange(e,car.car_id)}
 />
 
 <input
-name="price"
-value={car.price_per_day}
-onChange={(e)=>handleChange(e,car.car_id)}
+  name="price_per_day"
+  placeholder="price"
+  value={car.price_per_day || ""}
+  onChange={(e)=>handleChange(e,car.car_id)}
 />
-<input
-name="year"
-value={car.year}
-onChange={(e)=>handleChange(e,car.car_id)}
-/>
+
 <input
 type="file"
 onChange={(e)=>handleImageChange(e,car.car_id)}
 />
 
-<button onClick={saveEdit}>Save</button>
+<button onClick={()=>saveEdit(car)}>Save</button>
 
 </>
 

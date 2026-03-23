@@ -1,26 +1,24 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import "./ownersrequest.css";
 
 function OwnerRequest() {
 
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      name: "Rahul Kumar",
-      email: "rahul@gmail.com",
-      phone: "9876543210",
-      place: "Delhi",
-      status: "Pending"
-    },
-    {
-      id: 2,
-      name: "Arjun Nair",
-      email: "arjun@gmail.com",
-      phone: "9876543211",
-      place: "Kerala",
-      status: "Pending"
-    }
-  ]);
+useEffect(() => {
+  const fetchRequests = async () => {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("http://localhost:5000/api/owner/bookings", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+    setRequests(data);
+  };
+
+  fetchRequests();
+}, []);
 
   const handleAccept = (id) => {
     const updated = requests.map((req) =>

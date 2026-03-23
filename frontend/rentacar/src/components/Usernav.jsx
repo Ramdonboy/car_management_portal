@@ -10,7 +10,11 @@ function Usernav() {
         <li>
           <NavLink to="/UserDashboard">Browse cars</NavLink>
         </li>
-        <li>
+        
+       <li>
+        <NavLink to="/mybookings">My Bookings</NavLink>
+      </li>
+       <li>
           <NavLink to="/Myprofile">My Profile</NavLink>
 
         </li>
