@@ -162,7 +162,7 @@ app.post(
       res.json({ message: "Owner registration submitted" });
 
     } catch (err) {
-      console.error(err);
+      
       res.status(500).json({ message: "Server error" });
     }
   }
@@ -177,31 +177,186 @@ app.post("/api/login", async (req, res) => {
     email = email?.trim();
     password = password?.trim();
 
+    //  Get user
     const [rows] = await pool.query(
-      "SELECT id,name,email,role,status FROM users WHERE email=? AND password=?",
-      [email, password]
+      "SELECT id, name, email, role, status, password FROM users WHERE email=?",
+      [email]
     );
 
+    //  User not found
     if (rows.length === 0) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const user = rows[0];
 
+    //  Password mismatch
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    //  Normalize status (VERY IMPORTANT)
+    const status = user.status?.toLowerCase();
+
+    //  OWNER STATUS CHECK
+  //  OWNER LOGIN CONTROL
+if (user.role === "owner") {
+
+  if (user.status === "pending") {
+    return res.status(403).json({
+      message: "Your account is pending admin approval",
+    });
+  }
+
+  if (user.status === "rejected") {
+    return res.status(403).json({
+      message: "Your registration was rejected by admin",
+    });
+  }
+
+  //  Extra safety (very important)
+  if (user.status !== "approved") {
+    return res.status(403).json({
+      message: "You are not approved by admin",
+    });
+  }
+}
+
+    //  Generate token
     const token = jwt.sign(
-      { userid: user.id },
+      { userid: user.id, role: user.role },
       SECRET_KEY,
       { expiresIn: "2d" }
     );
 
+    //  Remove password before sending response
+    delete user.password;
+
     res.json({
       message: "Login successful",
-      token: token,
-      user: user,
+      token,
+      user,
     });
 
   } catch (err) {
+    
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+//----------ADMIN FETCH API-------------
+app.get("/api/admin/owner-requests", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT 
+        u.id,
+        u.name,
+        u.email,
+        u.phone,
+        u.status,
+        o.address AS place,
+        o.license_image
+      FROM users u
+      LEFT JOIN owners o ON u.id = o.owner_id
+      WHERE u.role = 'owner'
+    `);
+
+    console.log("OWNER REQUESTS:", rows); // 🔥 DEBUG
+
+    res.json(rows);
+  } catch (err) {
     console.error(err);
+    res.status(500).json({ message: "Error fetching owner requests" });
+  }
+});
+//---------ADMIN ACCEPT/REJECT----------
+app.put("/api/admin/update-owner-status/:id", async (req, res) => {
+  try {
+    let { status } = req.body;
+    const id = req.params.id;
+
+    //  convert to lowercase
+    status = status.toLowerCase();
+
+    console.log("Updating ID:", id);
+    console.log("New Status:", status);
+
+    const [result] = await pool.query(
+      "UPDATE users SET status=? WHERE id=?",
+      [status, id]
+    );
+
+    console.log("Affected rows:", result.affectedRows);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "Status updated successfully" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+/* -------- ADMIN VIEW ALL CARS -------- */
+
+app.get("/api/admin/cars", verifyToken, async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT 
+        c.car_id,
+        TRIM(c.name) AS name,
+
+        --  FIX TYPE ISSUE
+        CASE 
+          WHEN c.type IS NULL OR c.type = '' OR c.type = 'undefined'
+          THEN 'SUV'
+          ELSE c.type
+        END AS type,
+
+        --  FIX FUEL
+        CASE 
+          WHEN c.fuel IS NULL OR c.fuel = '' OR c.fuel = 'undefined'
+          THEN 'Petrol'
+          ELSE c.fuel
+        END AS fuel,
+
+        --  FIX SEATS
+        IFNULL(c.seats, 4) AS seats,
+
+        --  FIX PRICE
+        IFNULL(c.price_per_day, 0) AS price_per_day,
+
+        c.image,
+        u.name AS owner_name,
+
+        --  REAL-TIME STATUS
+        CASE 
+          WHEN EXISTS (
+            SELECT 1 FROM bookings b 
+            WHERE b.car_id = c.car_id 
+            AND b.status IN ('pending','accepted')
+          )
+          THEN 'booked'
+          ELSE 'available'
+        END AS status
+
+      FROM cars c
+      JOIN users u ON c.owner_id = u.id
+
+      --  SOFT DELETE FILTER
+      WHERE c.is_deleted = FALSE
+
+      ORDER BY c.car_id DESC
+    `);
+
+    console.log("Cars Data:", rows);
+
+    res.json(rows);
+
+  } catch (err) {
+    console.error("FETCH CARS ERROR:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -414,7 +569,9 @@ app.get("/api/view/car", async (req, res) => {
   }
 });
 
-/* -------- OWNER ADD CAR -------- */
+
+
+/* -------- OWNER ADD CAR () -------- */
 
 app.post(
   "/api/add/car",
@@ -427,7 +584,7 @@ app.post(
     try {
       const userid = req.userid;
 
-      const {
+      let {
         reg_number,
         name,
         type,
@@ -438,8 +595,35 @@ app.post(
         status,
       } = req.body;
 
+      // 🔥 TRIM ALL INPUTS
+      reg_number = reg_number?.trim();
+      name = name?.trim();
+      type = type?.trim();
+      fuel = fuel?.trim();
+      transmission = transmission?.trim();
+
+      // 🔥 FIX "undefined" STRING BUG (VERY IMPORTANT)
+      if (!type || type === "undefined") type = "SUV";
+      if (!fuel || fuel === "undefined") fuel = "Petrol";
+      if (!transmission || transmission === "undefined") transmission = "Manual";
+      if (!status || status === "undefined") status = "available";
+
+      // 🔥 NUMBER FIX
+      seats = parseInt(seats) || 4;
+      price_per_day = parseFloat(price_per_day) || 0;
+
+      // 🔥 FORCE LOWERCASE STATUS
+      status = status.toLowerCase();
+
       const carImage = req.files?.car_image?.[0]?.filename || null;
       const rcBook = req.files?.rc_book?.[0]?.filename || null;
+
+      // 🔥 VALIDATION
+      if (!reg_number || !name) {
+        return res.status(400).json({
+          message: "Car name and registration number are required",
+        });
+      }
 
       const [existing] = await pool.query(
         "SELECT * FROM cars WHERE reg_number=?",
@@ -450,9 +634,10 @@ app.post(
         return res.status(400).json({ message: "Car already exists" });
       }
 
+      // 🔥 INSERT CLEAN DATA
       await pool.query(
         `INSERT INTO cars
-        (owner_id,reg_number,name,type,fuel,transmission,seats,price_per_day,status,image,rc_book)
+        (owner_id, reg_number, name, type, fuel, transmission, seats, price_per_day, status, image, rc_book)
         VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
         [
           userid,
@@ -469,14 +654,15 @@ app.post(
         ]
       );
 
-      res.status(201).json({ message: "Car added successfully" });
+      res.json({ message: "Car added successfully" });
 
     } catch (err) {
-      console.error(err);
+      console.error("ADD CAR ERROR:", err);
       res.status(500).json({ message: "Server error" });
     }
   }
 );
+
 
 /* -------- OWNER VIEW CARS -------- */
 
@@ -528,20 +714,31 @@ app.put("/update-car/:id", verifyToken, async (req, res) => {
 app.delete("/delete-car/:id", verifyToken, async (req, res) => {
   try {
     const carId = req.params.id;
-    const ownerId = req.userid;
 
-    const [result] = await pool.query(
-      "DELETE FROM cars WHERE car_id=? AND owner_id=?",
-      [carId, ownerId]
+    // 🔍 Check booking status
+    const [bookings] = await pool.query(
+      `SELECT * FROM bookings 
+       WHERE car_id = ? AND status IN ('pending','accepted')`,
+      [carId]
     );
 
-    if (result.affectedRows === 0) {
-      return res.json({ message: "Not authorized" });
+    // ❌ If booked or pending → block delete
+    if (bookings.length > 0) {
+      return res.status(400).json({
+        message: "Car is booked. Cannot delete."
+      });
     }
+
+    //  Soft delete allowed
+    await pool.query(
+      "UPDATE cars SET is_deleted = TRUE WHERE car_id = ?",
+      [carId]
+    );
 
     res.json({ message: "Car deleted successfully" });
 
   } catch (err) {
+    console.error("DELETE ERROR:", err);
     res.status(500).json({ message: "Server error" });
   }
 });

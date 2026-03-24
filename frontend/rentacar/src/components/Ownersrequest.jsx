@@ -1,59 +1,73 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./ownersrequest.css";
 
 function OwnerRequest() {
+  const [requests, setRequests] = useState([]);
 
-useEffect(() => {
+  useEffect(() => {
+    fetchRequests();
+  }, []);
+
   const fetchRequests = async () => {
-    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch("http://localhost:5000/api/admin/owner-requests");
+      const data = await res.json();
+      setRequests(data);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
 
-    const res = await fetch("http://localhost:5000/api/owner/bookings", {
-      headers: {
-        Authorization: `Bearer ${token}`
+  const updateStatus = async (id, status) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/admin/update-owner-status/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status }),
+        }
+      );
+
+      const data = await res.json();
+      console.log("API RESPONSE:", data);
+
+      // ❌ If backend failed
+      if (!res.ok) {
+        alert(data.message || "Failed to update status");
+        return;
       }
-    });
 
-    const data = await res.json();
-    setRequests(data);
-  };
+      // ✅ ALWAYS REFETCH FROM DATABASE (IMPORTANT FIX)
+      await fetchRequests();
 
-  fetchRequests();
-}, []);
-
-  const handleAccept = (id) => {
-    const updated = requests.map((req) =>
-      req.id === id ? { ...req, status: "Accepted" } : req
-    );
-    setRequests(updated);
-  };
-
-  const handleReject = (id) => {
-    const updated = requests.map((req) =>
-      req.id === id ? { ...req, status: "Rejected" } : req
-    );
-    setRequests(updated);
+    } catch (error) {
+      console.error("Update error:", error);
+    }
   };
 
   return (
     <div className="request-container">
       <h2>Owner Registration Requests</h2>
 
-      <div className="request-table">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Place</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Place</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-          <tbody>
-            {requests.map((req) => (
+        <tbody>
+          {requests.length > 0 ? (
+            requests.map((req) => (
               <tr key={req.id}>
                 <td>{req.id}</td>
                 <td>{req.name}</td>
@@ -61,34 +75,36 @@ useEffect(() => {
                 <td>{req.phone}</td>
                 <td>{req.place}</td>
 
-                <td className={req.status.toLowerCase()}>
-                  {req.status}
+                {/* ✅ STATUS */}
+                <td className={req.status?.toLowerCase()}>
+                  {req.status || "pending"}
                 </td>
 
                 <td>
-                  <div className="action-buttons">
-                    <button
-                      className="accept-btn"
-                      onClick={() => handleAccept(req.id)}
-                    >
-                      Accept
-                    </button>
+                <button
+                onClick={() => updateStatus(req.id, "approved")}
+              >
+                Accept
+              </button>
 
-                    <button
-                      className="reject-btn"
-                      onClick={() => handleReject(req.id)}
-                    >
-                      Reject
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => updateStatus(req.id, "rejected")}
+                    disabled={req.status !== "pending"}
+                  >
+                    Reject
+                  </button>
                 </td>
-
               </tr>
-            ))}
-          </tbody>
-
-        </table>
-      </div>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" style={{ textAlign: "center" }}>
+                No requests found
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }

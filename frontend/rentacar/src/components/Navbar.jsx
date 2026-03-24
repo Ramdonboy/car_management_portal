@@ -9,7 +9,7 @@ function Navbar() {
  
   const handleLogoutClick = (e) => {
   e.preventDefault();
-  console.log("Logout clicked"); // 👈 check this
+  console.log("Logout clicked"); //  check this
   setShowSnackbar(true);
 };
 
@@ -29,6 +29,7 @@ function Navbar() {
 
         <ul className="nav-links">
           <li><NavLink to="/cars">Cars</NavLink></li>
+          <li><NavLink to="/Ownersrequest">Owner Request</NavLink></li>
           <li><NavLink to="/users">Users</NavLink></li>
           <li><NavLink to="/bookings">Bookings</NavLink></li>
           <li><NavLink to="/reports">Reports</NavLink></li>

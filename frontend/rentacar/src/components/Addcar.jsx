@@ -5,7 +5,7 @@ function AddCar(){
 
 const [car,setCar] = useState({
 name:"",
-model:"",
+type:"",
 fuel:"",
 transmission:"",
 seats:"",

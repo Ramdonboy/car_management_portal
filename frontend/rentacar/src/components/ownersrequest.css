@@ -1,96 +1,136 @@
-.request-container{
-padding:40px;
-font-family:Arial, Helvetica, sans-serif;
-background:#f4f6f8;
-min-height:100vh;
+/* ===== PAGE CONTAINER ===== */
+.request-container {
+  padding: 30px;
+  background: #f4f6f9;
+  min-height: 100vh;
 }
 
-.request-container h2{
-text-align:center;
-margin-bottom:30px;
-font-size:28px;
+/* ===== TITLE ===== */
+.request-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #222;
 }
 
-/* TABLE */
-
-.request-table{
-width:90%;
-margin:auto;
+/* ===== TABLE ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.request-table table{
-width:100%;
-border-collapse:collapse;
-background:white;
-border-radius:8px;
-overflow:hidden;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
+/* ===== HEADER ===== */
+thead {
+  background: #eef1f5;
 }
 
-.request-table th{
-background:#2c3e50;
-color:white;
-padding:15px;
-text-align:center;
-font-size:16px;
+th {
+  padding: 15px;
+  text-align: left;
+  font-size: 14px;
+  color: #555;
+  letter-spacing: 0.5px;
 }
 
-.request-table td{
-padding:18px;
-text-align:center;
-border-bottom:1px solid #ddd;
-font-size:15px;
+/* ===== ROWS ===== */
+td {
+  padding: 18px 15px;
+  font-size: 14px;
+  color: #333;
+  border-top: 1px solid #eee;
 }
 
-/* ACTION BUTTONS */
-
-.action-buttons{
-display:flex;
-justify-content:center;
-gap:10px;
+/* ===== HOVER EFFECT ===== */
+tr:hover {
+  background: #f9fbfd;
+  transition: 0.2s;
 }
 
-.accept-btn{
-background:#22c55e;
-color:white;
-border:none;
-padding:8px 18px;
-border-radius:6px;
-cursor:pointer;
-font-size:14px;
+/* ===== STATUS ===== */
+td:nth-child(6) {
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
-.reject-btn{
-background:#ef4444;
-color:white;
-border:none;
-padding:8px 18px;
-border-radius:6px;
-cursor:pointer;
-font-size:14px;
+/* Optional colors */
+td:nth-child(6):contains("pending") {
+  color: orange;
+}
+td:nth-child(6):contains("Accepted") {
+  color: green;
+}
+td:nth-child(6):contains("Rejected") {
+  color: red;
 }
 
-.accept-btn:hover{
-background:#16a34a;
+/* ===== BUTTON CONTAINER ===== */
+td div {
+  display: flex;
+  gap: 10px;
 }
 
-.reject-btn:hover{
-background:#dc2626;
+/* ===== BUTTONS ===== */
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
 }
 
-/* STATUS COLORS */
-
-.accepted{
-color:green;
-font-weight:bold;
+/* ACCEPT BUTTON */
+button:first-child {
+  background: #28a745;
+  color: white;
 }
 
-.rejected{
-color:red;
-font-weight:bold;
+button:first-child:hover {
+  background: #218838;
 }
 
-.pending{
-color:#f59e0b;
-font-weight:bold;
+/* REJECT BUTTON */
+button:last-child {
+  background: #dc3545;
+  color: white;
+}
+
+button:last-child:hover {
+  background: #c82333;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 10px;
+  }
+
+  button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+.pending {
+  color: orange;
+  font-weight: 600;
+}
+
+.accepted {
+  color: green;
+  font-weight: 600;
+}
+
+.rejected {
+  color: rgba(255, 14, 14, 0.98);
+  font-weight: 600;
 }

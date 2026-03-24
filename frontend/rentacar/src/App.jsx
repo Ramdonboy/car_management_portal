@@ -51,7 +51,7 @@ function App() {
           <Route path="/reports" element={<Reports />} />
           <Route path="/users" element={<Users />} />
           <Route path="/bookings" element={<Bookings />} />
-          <Route path="/ownersrequest" element={<Ownersrequest />} />
+          <Route path="/Ownersrequest" element={<Ownersrequest />} />
         </Route>
         <Route path="/dashboard" element={<AdminDashboard />} />
 
