@@ -75,7 +75,7 @@ function OwnerRequest() {
                 <td>{req.phone}</td>
                 <td>{req.place}</td>
 
-                {/* ✅ STATUS */}
+                {/*  STATUS */}
                 <td className={req.status?.toLowerCase()}>
                   {req.status || "pending"}
                 </td>

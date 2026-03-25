@@ -1,78 +1,130 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 import "./reports.css";
 
-function AdminReport() {
-  // Sample Data (You can replace with backend data later)
-  const totalRevenue = 0;
-  const thisMonthRevenue = 0;
-  const totalBookings = 0;
-  const thisMonthBookings = 0;
+// Register chart
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-  const averageBookingValue = (totalRevenue / totalBookings).toFixed(2);
+const Revenue = () => {
+  const [data, setData] = useState({
+    totalRevenue: 0,
+    monthlyRevenue: [],
+    totalBookings: 0,
+  });
 
-const topCars = [
-  { name: "Toyota Camry", bookings: 0, revenue: 0 },
-  { name: "BMW X5", bookings: 0, revenue: 0 },
-  { name: "Audi A6", bookings: 0, revenue: 0 },
-  { name: "Porsche Cayenne", bookings: 0, revenue: 0 },
-  { name: "Range Rover Evoque", bookings: 0, revenue: 0 },
-];
+  useEffect(() => {
+    fetchRevenue();
+  }, []);
+
+  const fetchRevenue = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/admin/revenue");
+      const result = await res.json();
+
+      setData(result);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // 📊 CHART DATA
+  const chartData = {
+    labels: data.monthlyRevenue.map((m) => m.month),
+    datasets: [
+      {
+        label: "Monthly Revenue",
+        data: data.monthlyRevenue.map((m) => m.revenue),
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: "top" },
+      title: {
+        display: true,
+        text: "Revenue Trend",
+      },
+    },
+  };
 
   return (
-    <div className="report-container">
-      <h2 className="report-title">Admin Dashboard - Reports</h2>
+    <div className="revenue-page">
+      <h2>Revenue Analytics</h2>
 
-      {/* Revenue Cards */}
-      <div className="card-container">
-        <div className="report-card">
-          <h3>Total Revenue</h3>
-          <p>₹ {totalRevenue}</p>
+      {/* ✅ STATS */}
+      <div className="stats">
+        <div className="card">
+          <h3>₹{Number(data.totalRevenue).toLocaleString()}</h3>
+          <p>Total Revenue</p>
         </div>
 
-        <div className="report-card">
-          <h3>This Month Revenue</h3>
-          <p>₹ {thisMonthRevenue}</p>
+        <div className="card">
+          <h3>{data.totalBookings}</h3>
+          <p>Total Bookings</p>
         </div>
 
-        <div className="report-card">
-          <h3>Average Booking Value</h3>
-          <p>₹ {averageBookingValue}</p>
-        </div>
-      </div>
-
-      {/* Booking Statistics */}
-      <div className="statistics-section">
-        <h3>Booking Statistics</h3>
-        <div className="stats-box">
-          <p>Total Bookings: <strong>{totalBookings}</strong></p>
-          <p>This Month Bookings: <strong>{thisMonthBookings}</strong></p>
+        <div className="card">
+          <h3>{data.monthlyRevenue.length}</h3>
+          <p>Active Months</p>
         </div>
       </div>
 
-      {/* Top Performing Cars */}
-      <div className="top-cars-section">
-        <h3>Top Performing Cars</h3>
+      {/* 📊 CHART */}
+      <div className="chart-container">
+        <Line data={chartData} options={chartOptions} />
+      </div>
+
+      {/* 📋 TABLE */}
+      <div className="table">
+        <h3>Monthly Revenue</h3>
+
         <table>
           <thead>
             <tr>
-              <th>Car Name</th>
-              <th>Total Bookings</th>
-              <th>Total Revenue (₹)</th>
+              <th>Month</th>
+              <th>Revenue</th>
             </tr>
           </thead>
+
           <tbody>
-            {topCars.map((car, index) => (
-              <tr key={index}>
-                <td>{car.name}</td>
-                <td>{car.bookings}</td>
-                <td>{car.revenue}</td>
+            {data.monthlyRevenue.length > 0 ? (
+              data.monthlyRevenue.map((m, i) => (
+                <tr key={i}>
+                  <td>{m.month}</td>
+                  <td>₹{Number(m.revenue).toLocaleString()}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="2">No data</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
     </div>
   );
-}
+};
 
-export default AdminReport;
+export default Revenue;

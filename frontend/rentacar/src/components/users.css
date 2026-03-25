@@ -107,3 +107,22 @@ tbody tr {
   padding: 25px;
   color: #94a3b8;
 }
+.approved {
+  color: green;
+  font-weight: bold;
+}
+
+.rejected {
+  color: red;
+  font-weight: bold;
+}
+
+.pending {
+  color: orange;
+}
+
+button {
+  margin: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+}

@@ -243,7 +243,109 @@ if (user.role === "owner") {
     res.status(500).json({ message: "Server error" });
   }
 });
+// -------- ADMIN REVENUE ANALYTICS --------
+app.get("/api/admin/revenue", async (req, res) => {
+  try {
+    const [total] = await pool.query(`
+      SELECT COALESCE(SUM(total_price),0) AS totalRevenue
+      FROM bookings
+      WHERE status IN ('completed','approved')
+    `);
 
+    const [monthly] = await pool.query(`
+      SELECT 
+        DATE_FORMAT(pickup_date, '%Y-%m') AS month,
+        COALESCE(SUM(total_price),0) AS revenue
+      FROM bookings
+      WHERE status IN ('completed','approved')
+      GROUP BY month
+      ORDER BY month ASC
+    `);
+
+    res.json({
+      totalRevenue: total[0].totalRevenue,
+      monthlyRevenue: monthly,
+      totalBookings: monthly.length
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching revenue" });
+  }
+});
+// -------- ADMIN FETCH ALL BOOKINGS --------
+app.get("/api/admin/bookings", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT 
+        b.booking_id,
+        b.pickup_date,
+        b.return_date,
+        b.total_price,
+        LOWER(b.status) AS status,
+
+        u.name AS user_name,
+        o.name AS owner_name,
+        c.name AS car_name
+
+      FROM bookings b
+      JOIN users u ON b.user_id = u.id
+      JOIN users o ON b.owner_id = o.id
+      JOIN cars c ON b.car_id = c.car_id
+
+      ORDER BY b.booking_id DESC
+    `);
+
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching bookings" });
+  }
+});
+// -------- ADMIN UPDATE USER STATUS --------
+app.put("/api/admin/user-status/:id", async (req, res) => {
+  try {
+    const { status } = req.body;
+    const userId = req.params.id;
+
+    await pool.query(
+      "UPDATE users SET status=? WHERE id=? AND role='user'",
+      [status, userId]
+    );
+
+    res.json({ message: "User status updated" });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+// -------- ADMIN FETCH USERS --------
+app.get("/api/admin/users", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT 
+        u.id,
+        u.name,
+        u.email,
+        u.phone,
+        u.status,
+        COUNT(b.booking_id) AS bookings,
+        IFNULL(SUM(b.total_price), 0) AS total_spent
+      FROM users u
+      LEFT JOIN bookings b ON u.id = b.user_id
+      WHERE u.role = 'user'
+      GROUP BY u.id
+    `);
+
+    console.log("USERS DATA:", rows); // 🔥 ADD THIS
+
+    res.json(rows);
+
+  } catch (err) {
+    console.error("ERROR:", err);
+    res.status(500).json({ message: "Error fetching users" });
+  }
+});
 //----------ADMIN FETCH API-------------
 app.get("/api/admin/owner-requests", async (req, res) => {
   try {

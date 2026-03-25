@@ -1,8 +1,8 @@
 .navbar {
   display: flex;
-  justify-content: space-between; /* 🔥 ADD THIS */
-  align-items: center;            /* 🔥 ADD THIS */
-  width: 100%;                    /* 🔥 ADD THIS */
+  justify-content: space-between; 
+  align-items: center;            
+  width: 100%;                    
 
   background-color: #02011c;
   padding: 15px 40px;
@@ -27,7 +27,7 @@
 }
 
 .nav-links a {
-  color: white; /* 🔥 ADD THIS */
+  color: white;
   text-decoration: none;
   font-weight: 500;
   transition: 0.3s ease;

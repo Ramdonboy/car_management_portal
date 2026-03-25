@@ -1,128 +1,142 @@
-.report-container {
-  padding: 50px;
-  background: linear-gradient(to right, #eef2f3, #dfe9f3);
+/* 🌌 PAGE BACKGROUND */
+.revenue-page {
+  padding: 30px;
   min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  font-family: "Inter", sans-serif;
 }
 
-.report-title {
-  text-align: center;
-  margin-bottom: 35px;
-  color: #1f2d3d;
+/* 🧠 TITLE */
+.revenue-page h2 {
   font-size: 28px;
-  font-weight: 600;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #1e293b;
 }
 
-/* Cards Section */
-.card-container {
-  padding: 100px;
-  display: flex;
-  flex-wrap: wrap;
+/* 📊 STATS GRID */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
-  margin-bottom: 35px;
+  margin-bottom: 30px;
 }
 
-.report-card {
-  flex: 1 1 30%;
-  background: white;
+/* 💎 PREMIUM CARD */
+.card {
   padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.report-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+/* ✨ Gradient glow effect */
+.card::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: linear-gradient(120deg, #6366f1, #3b82f6, #22c55e);
+  top: -50%;
+  left: -50%;
+  opacity: 0.08;
+  transform: rotate(25deg);
 }
 
-.report-card h3 {
-  margin-bottom: 12px;
-  color: #555;
-  font-size: 18px;
+/* 🖱 Hover */
+.card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
 }
 
-.report-card p {
-  font-size: 24px;
-  font-weight: bold;
-  color: #007bff;
+/* 💰 VALUE */
+.card h3 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
 }
 
-/* Statistics Section */
-.statistics-section {
-  background: white;
+/* 📝 LABEL */
+.card p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* 📈 CHART */
+.chart-container {
+  background: rgba(255, 255, 255, 0.85);
   padding: 25px;
-  border-radius: 12px;
-  margin-bottom: 35px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  margin-bottom: 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
-.statistics-section h3 {
-  margin-bottom: 15px;
-  color: #1f2d3d;
-}
-
-.stats-box {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  font-size: 16px;
-}
-
-.stats-box p {
-  margin: 10px;
-}
-
-/* Top Cars Section */
-.top-cars-section {
-  background: white;
+/* 📋 TABLE CONTAINER */
+.table {
+  background: rgba(255, 255, 255, 0.85);
   padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
-.top-cars-section h3 {
+.table h3 {
   margin-bottom: 15px;
-  color: #1f2d3d;
+  font-weight: 600;
+  color: #1e293b;
 }
 
-.top-cars-section table {
+/* 🧾 TABLE */
+table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.top-cars-section th,
-.top-cars-section td {
-  padding: 12px;
-  text-align: center;
+/* HEADER */
+thead {
+  background: #f1f5f9;
 }
 
-.top-cars-section th {
-  background-color: #007bff;
-  color: white;
+th {
+  padding: 14px;
+  text-align: left;
+  font-size: 14px;
+  color: #334155;
 }
 
-.top-cars-section tr {
-  border-bottom: 1px solid #ddd;
+/* ROWS */
+td {
+  padding: 14px;
+  font-size: 14px;
+  color: #475569;
 }
 
-.top-cars-section tr:nth-child(even) {
-  background-color: #f8f9fa;
+/* ROW STYLE */
+tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
 }
 
-.top-cars-section tr:hover {
-  background-color: #e3f2fd;
+/* HOVER EFFECT */
+tbody tr:hover {
+  background: rgba(99, 102, 241, 0.05);
+  transform: scale(1.01);
 }
 
-/* Responsive Design */
+/* 📱 RESPONSIVE */
 @media (max-width: 768px) {
-  .card-container {
-    flex-direction: column;
+  .revenue-page {
+    padding: 15px;
   }
 
-  .stats-box {
-    flex-direction: column;
-    align-items: center;
+  .card h3 {
+    font-size: 22px;
   }
 }
