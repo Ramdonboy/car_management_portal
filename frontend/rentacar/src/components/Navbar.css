@@ -1,103 +1,151 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* NAVBAR */
 .navbar {
   display: flex;
-  justify-content: space-between; 
-  align-items: center;            
-  width: 100%;                    
+  align-items: center;
+  justify-content: space-between;
+  
+  z-index: 1000;
 
   background-color: #02011c;
-  padding: 15px 40px;
-  
-  position: fixed;  /* better than absolute */
+  padding: 12px 40px;
+
+  position: fixed;
   top: 0;
   left: 0;
+    height: 60px; 
+  width: 100%;
   z-index: 1000;
 }
-
+.content {
+  margin-top: 70px; /* 🔥 pushes content below navbar */
+}
+/* LOGO */
 .logo {
   font-size: 22px;
-  color: white;
-  font-weight: bold;
-}
+  font-weight: 700;
+  letter-spacing: 0.5px;
 
-.nav-links {
-  list-style: none;
+  /* Gradient text */
+  background: linear-gradient(135deg, #ffffff, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
   display: flex;
-  color: rgb(18, 18, 18);
-  gap: 25px;
+  align-items: center;
+  gap: 8px;
 }
 
+/* NAV LINKS */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+}
+
+/* LINKS STYLE */
 .nav-links a {
-  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 38px;
+  padding: 0 16px;
+
+  color: #e5e7eb;
   text-decoration: none;
   font-weight: 500;
-  transition: 0.3s ease;
+
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
+/* HOVER */
 .nav-links a:hover {
-  color: #f4f4f8;
+  background: #1f2937;
+  color: white;
 }
 
+/* ACTIVE */
 .nav-links a.active {
-  color: #e2e2ed;
-  border-bottom: 2px solid #e6e7ee;
-  padding-bottom: 4px;
+  background: #2563eb;
+  color: white;
 }
-/* Snackbar container */
+
+/* LOGOUT BUTTON (PRO STYLE) */
+.logout-btn {
+  border: 1px solid #374151;
+}
+
+.logout-btn:hover {
+  background: #111827;
+  border-color: #4b5563;
+}
+
+/* 🔥 SNACKBAR */
 .snackbar {
   position: fixed;
   bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1f1f1f;
-  color: #fff;
-  padding: 16px 25px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 2000;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-  animation: fadeIn 0.3s ease-in-out;
+  right: 30px;
+
+  background: #111827;
+  color: white;
+  padding: 18px 20px;
+  border-radius: 12px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  width: 280px;
+
+  z-index: 9999;
+} /* ✅ FIX ADDED HERE */
+
+/* TEXT */
+.snackbar p {
+  margin-bottom: 10px;
+  font-size: 14px;
 }
 
+/* BUTTONS */
 .snackbar-actions {
-  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-.snackbar button {
-  margin: 0 8px;
-  padding: 7px 16px;
+.ok-btn {
+  background: #2563eb;
   border: none;
+  padding: 6px 12px;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
-  font-weight: 500;
 }
 
-.snackbar button:first-child {
-  background: #4CAF50;
+.cancel-btn {
+  background: #374151;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
   color: white;
+  cursor: pointer;
 }
 
-.snackbar button:last-child {
-  background: #ff4d4d;
-  color: white;
-}
-
-/* Animation */
-@keyframes fadeIn {
+/* ANIMATION */
+@keyframes slideIn {
   from {
+    transform: translateY(50px);
     opacity: 0;
-    bottom: 0;
   }
   to {
+    transform: translateY(0);
     opacity: 1;
-    bottom: 20px;
   }
-}
-.logout-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
 }

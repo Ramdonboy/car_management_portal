@@ -6,7 +6,7 @@
   font-family: "Inter", sans-serif;
 }
 
-/* 🧠 TITLE */
+/*  TITLE */
 .revenue-page h2 {
   font-size: 28px;
   font-weight: 700;
@@ -14,7 +14,7 @@
   color: #1e293b;
 }
 
-/* 📊 STATS GRID */
+/* STATS GRID */
 .stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -35,18 +35,6 @@
   overflow: hidden;
 }
 
-/* ✨ Gradient glow effect */
-.card::before {
-  content: "";
-  position: absolute;
-  width: 150%;
-  height: 150%;
-  background: linear-gradient(120deg, #6366f1, #3b82f6, #22c55e);
-  top: -50%;
-  left: -50%;
-  opacity: 0.08;
-  transform: rotate(25deg);
-}
 
 /* 🖱 Hover */
 .card:hover {

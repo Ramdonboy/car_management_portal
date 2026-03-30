@@ -35,9 +35,11 @@ function Navbar() {
           <li><NavLink to="/reports">Reports</NavLink></li>
 
           <li>
-  <button className="logout-btn" onClick={handleLogoutClick}>
-    Logout
-  </button>
+<li>
+  <a href="/" className="logout-btn" onClick={handleLogoutClick}>
+    ⏻Logout
+  </a>
+</li>
 </li>
         </ul>
       </nav>

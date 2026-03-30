@@ -23,7 +23,7 @@ const Bookings = () => {
     }
   };
 
-  // ✅ FILTER + SEARCH
+  //  FILTER + SEARCH
   const filteredBookings = bookings.filter((b) => {
     const matchesSearch =
       b.booking_id.toString().includes(search) ||

@@ -113,3 +113,58 @@ height:160px;
 }
 
 }
+/* 🔥 SNACKBAR */
+.snackbar {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #111827;
+  color: white;
+  padding: 18px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  width: 280px;
+  animation: slideIn 0.3s ease;
+}
+
+.snackbar p {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* BUTTONS */
+.snackbar-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.ok-btn {
+  background: #ef4444;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #374151;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+/* ANIMATION */
+@keyframes slideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

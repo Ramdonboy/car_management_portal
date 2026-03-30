@@ -219,6 +219,7 @@ function Register() {
               <input
                 type="text"
                 name="address"
+               
                 value={form.address}
                 onChange={handleChange}
                 required
@@ -297,7 +298,7 @@ function Register() {
   className="toggle-btn"
   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
 >
-  {showPassword ? <FaEye size={15} /> : <FaEyeSlash size={15}/>}
+  {showConfirmPassword ? <FaEye size={15} /> : <FaEyeSlash size={15}/>}
 
 </span>
           </div>

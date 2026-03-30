@@ -35,9 +35,9 @@ function Ownernav() {
             <NavLink to="/acceptingrequest">Booking Request</NavLink>
           </li>
           <li>
-            <button className="logout-btn" onClick={handleLogoutClick}>
-              Logout
-            </button>
+            <a href="/" className="logout-btn" onClick={handleLogoutClick}>
+              ⏻ Logout
+            </a>
           </li>
         </ul>
       </nav>

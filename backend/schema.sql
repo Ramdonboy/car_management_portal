@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     role ENUM('admin','owner','user') NOT NULL,
     status ENUM('pending','approved','rejected') Default 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 );
 ----------------Table 2 owners------------
 CREATE TABLE IF NOT EXISTS owners (

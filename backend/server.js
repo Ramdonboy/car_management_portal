@@ -289,16 +289,24 @@ app.get("/api/admin/bookings", async (req, res) => {
         c.name AS car_name
 
       FROM bookings b
+
+      --  USER (who booked)
       JOIN users u ON b.user_id = u.id
-      JOIN users o ON b.owner_id = o.id
+
+      --  CAR (important)
       JOIN cars c ON b.car_id = c.car_id
+
+      --  ✅ FIXED: OWNER FROM CARS TABLE (NOT bookings)
+      JOIN users o ON c.owner_id = o.id
 
       ORDER BY b.booking_id DESC
     `);
 
+    console.log("BOOKINGS DATA:", rows); // debug
+
     res.json(rows);
   } catch (err) {
-    console.error(err);
+    console.error("ERROR FETCHING BOOKINGS:", err);
     res.status(500).json({ message: "Error fetching bookings" });
   }
 });
@@ -664,9 +672,33 @@ app.put("/api/updateprofile", verifyToken, async (req, res) => {
 
 app.get("/api/view/car", async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM cars");
+    const [rows] = await pool.query(`
+      SELECT 
+        c.*,
+
+        -- 🔥 REAL-TIME STATUS (VERY IMPORTANT)
+        CASE 
+          WHEN EXISTS (
+            SELECT 1 FROM bookings b
+            WHERE b.car_id = c.car_id
+            AND b.status IN ('pending','accepted')
+          )
+          THEN 'booked'
+          ELSE 'available'
+        END AS status
+
+      FROM cars c
+
+      -- 🔥 HIDE DELETED CARS
+      WHERE c.is_deleted = FALSE
+
+      ORDER BY c.car_id DESC
+    `);
+
     res.json(rows);
+
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -770,16 +802,19 @@ app.post(
 
 app.get("/api/view/owner/cars", verifyToken, async (req, res) => {
   try {
+    console.log("USER ID:", req.userid); // ✅ correct debug
+
     const ownerId = req.userid;
 
-    const [rows] = await pool.query(
-      "SELECT * FROM cars WHERE owner_id=?",
+    const [cars] = await pool.query(
+      "SELECT * FROM cars WHERE owner_id = ? AND is_deleted = FALSE",
       [ownerId]
     );
 
-    res.json(rows);
+    res.json(cars);
 
   } catch (err) {
+    console.error("FETCH ERROR:", err);
     res.status(500).json({ message: "Server error" });
   }
 });

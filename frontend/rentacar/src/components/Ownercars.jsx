@@ -3,198 +3,181 @@ import "./ownercars.css";
 
 function MyCars() {
 
-const [cars, setCars] = useState([]);
+  const [cars, setCars] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
-useEffect(() => {
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-  const fetchCars = async () => {
+        const res = await fetch("http://localhost:5000/api/view/owner/cars", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const data = await res.json();
+
+        // ✅ FIX: prevent crash
+        if (Array.isArray(data)) {
+          setCars(data);
+        } else {
+          console.error("Backend error:", data);
+          setCars([]);
+        }
+
+      } catch (err) {
+        console.error("Error fetching cars:", err);
+      }
+    };
+
+    fetchCars();
+  }, []);
+
+  /* Delete car */
+  const deleteCar = async (id) => {
+    const token = localStorage.getItem("token");
 
     try {
-
-      const token = localStorage.getItem("token");
-
-      const res = await fetch("http://localhost:5000/api/view/owner/cars", {
+      const res = await fetch(`http://localhost:5000/delete-car/${id}`, {
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
 
       const data = await res.json();
-      setCars(data);
+
+      if (data.message === "Car deleted successfully") {
+        setCars(prev => prev.filter(car => car.car_id !== id));
+      } else {
+        alert(data.message);
+      }
 
     } catch (err) {
-      console.error("Error fetching cars:", err);
+      console.error(err);
     }
-
   };
 
-  fetchCars();
+  /* Save edit */
+  const saveEdit = async (car) => {
+    const token = localStorage.getItem("token");
 
-}, []);
+    try {
+      const res = await fetch(`http://localhost:5000/update-car/${car.car_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: car.name,
+          fuel: car.fuel,
+          seats: car.seats,
+          price_per_day: car.price_per_day
+        })
+      });
 
+      const data = await res.json();
+      console.log(data);
 
+      setEditingId(null);
 
-const [editingId,setEditingId] = useState(null);
-
-/* Delete car */
-const deleteCar = async (id) => {
-  const token = localStorage.getItem("token");
-
-  console.log("TOKEN:", token);
-  console.log("Deleting car:", id);
-
-  try {
-    const res = await fetch(`http://localhost:5000/delete-car/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const data = await res.json();
-    console.log("Response:", data);
-
-    if (data.message === "Car deleted successfully") {
-      setCars(prev => prev.filter(car => car.car_id !== id));
-    } else {
-      alert(data.message); // 🔥 VERY IMPORTANT
+    } catch (err) {
+      console.error(err);
     }
+  };
 
-  } catch (err) {
-    console.error(err);
-  }
-};
+  /* Handle input change */
+  const handleChange = (e, id) => {
+    const { name, value } = e.target;
 
-/* Start edit */
-const saveEdit = async (car) => {
-  const token = localStorage.getItem("token");
+    setCars(cars.map(car =>
+      car.car_id === id ? { ...car, [name]: value } : car
+    ));
+  };
 
-  try {
-    const res = await fetch(`http://localhost:5000/update-car/${car.car_id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        name: car.name,
-        fuel: car.fuel,
-        seats: car.seats,
-        price_per_day: car.price_per_day
-      })
-    });
+  /* Handle image upload */
+  const handleImageChange = (e, id) => {
+    const file = e.target.files[0];
+    const imageURL = URL.createObjectURL(file);
 
-    const data = await res.json();
-    console.log(data);
+    setCars(cars.map(car =>
+      car.car_id === id ? { ...car, image: imageURL } : car
+    ));
+  };
 
-    setEditingId(null);
+  /* Start edit */
+  const startEdit = (id) => {
+    setEditingId(id);
+  };
 
-  } catch (err) {
-    console.error(err);
-  }
-};
+  return (
+    <div className="mycars">
+      <h2>My Cars</h2>
 
-/* Handle input change */
-const handleChange = (e,id)=>{
-const {name,value} = e.target;
+      <div className="car-list">
 
-setCars(cars.map(car =>
-car.car_id === id ? {...car,[name]:value} : car
-));
-};
+        {Array.isArray(cars) && cars.map((car) => (
+          <div className="car-card" key={car.car_id}>
 
-/* Handle image upload */
-const handleImageChange = (e,id)=>{
-const file = e.target.files[0];
-const imageURL = URL.createObjectURL(file);
+            <img
+              src={`http://localhost:5000/uploads/car_image/${car.image}`}
+              alt="car"
+            />
 
-setCars(cars.map(car =>
-car.car_id === id ? {...car,image:imageURL} : car
-));
-};
+            {editingId === car.car_id ? (
+              <>
+                <input
+                  name="name"
+                  value={car.name}
+                  onChange={(e) => handleChange(e, car.car_id)}
+                />
 
-/* Save edit */
-const startEdit = (id) => {
-  setEditingId(id);
-};
+                <input
+                  name="fuel"
+                  value={car.fuel}
+                  onChange={(e) => handleChange(e, car.car_id)}
+                />
 
-return(
+                <input
+                  name="seats"
+                  value={car.seats}
+                  onChange={(e) => handleChange(e, car.car_id)}
+                />
 
-<div className="mycars">
+                <input
+                  name="price_per_day"
+                  value={car.price_per_day || ""}
+                  onChange={(e) => handleChange(e, car.car_id)}
+                />
 
-<h2>My Cars</h2>
+                <input
+                  type="file"
+                  onChange={(e) => handleImageChange(e, car.car_id)}
+                />
 
-<div className="car-list">
+                <button onClick={() => saveEdit(car)}>Save</button>
+              </>
+            ) : (
+              <>
+                <h3>{car.name}</h3>
+                <p>Fuel: {car.fuel}</p>
+                <p>Seats: {car.seats}</p>
+                <p>Price: ₹{car.price_per_day}/day</p>
 
-{cars.map((car)=>(
-<div className="car-card" key={car.car_id}>
+                <button onClick={() => startEdit(car.car_id)}>Edit</button>
+                <button onClick={() => deleteCar(car.car_id)}>Delete</button>
+              </>
+            )}
 
-<img
-src={`http://localhost:5000/uploads/car_image/${car.image}`}
-alt="car"
-/>
+          </div>
+        ))}
 
-{editingId === car.car_id ? (
-
-<>
-<input
-name="name"
-placeholder="name"
-value={car.name}
-onChange={(e)=>handleChange(e,car.car_id)}
-/>
-
-<input
-name="fuel"
-placeholder="fuel"
-value={car.fuel}
-onChange={(e)=>handleChange(e,car.car_id)}
-/>
-
-<input
-name="seats"
-placeholder="seats"
-value={car.seats}
-onChange={(e)=>handleChange(e,car.car_id)}
-/>
-
-<input
-  name="price_per_day"
-  placeholder="price"
-  value={car.price_per_day || ""}
-  onChange={(e)=>handleChange(e,car.car_id)}
-/>
-
-<input
-type="file"
-onChange={(e)=>handleImageChange(e,car.car_id)}
-/>
-
-<button onClick={()=>saveEdit(car)}>Save</button>
-
-</>
-
-):(
-
-<>
-<h3>{car.name}</h3>
-<p>Fuel: {car.fuel}</p>
-<p>Seats: {car.seats}</p>
-<p>Price: ₹{car.price_per_day}/day</p>
-<button onClick={()=>startEdit(car.car_id)}>Edit</button>
-<button onClick={()=>deleteCar(car.car_id)}>Delete</button>
-</>
-
-)}
-
-</div>
-))}
-
-</div>
-
-</div>
-
-);
+      </div>
+    </div>
+  );
 }
 
 export default MyCars;
