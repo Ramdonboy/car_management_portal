@@ -296,7 +296,7 @@ app.get("/api/admin/bookings", async (req, res) => {
       --  CAR (important)
       JOIN cars c ON b.car_id = c.car_id
 
-      --  ✅ FIXED: OWNER FROM CARS TABLE (NOT bookings)
+      --   FIXED: OWNER FROM CARS TABLE (NOT bookings)
       JOIN users o ON c.owner_id = o.id
 
       ORDER BY b.booking_id DESC
@@ -676,7 +676,7 @@ app.get("/api/view/car", async (req, res) => {
       SELECT 
         c.*,
 
-        -- 🔥 REAL-TIME STATUS (VERY IMPORTANT)
+        --  REAL-TIME STATUS (VERY IMPORTANT)
         CASE 
           WHEN EXISTS (
             SELECT 1 FROM bookings b
@@ -689,7 +689,7 @@ app.get("/api/view/car", async (req, res) => {
 
       FROM cars c
 
-      -- 🔥 HIDE DELETED CARS
+      --  HIDE DELETED CARS
       WHERE c.is_deleted = FALSE
 
       ORDER BY c.car_id DESC
@@ -706,7 +706,6 @@ app.get("/api/view/car", async (req, res) => {
 
 
 /* -------- OWNER ADD CAR () -------- */
-
 app.post(
   "/api/add/car",
   verifyToken,
@@ -729,46 +728,60 @@ app.post(
         status,
       } = req.body;
 
-      // 🔥 TRIM ALL INPUTS
-      reg_number = reg_number?.trim();
+      //  TRIM INPUTS
+      reg_number = reg_number?.trim().toUpperCase();
       name = name?.trim();
       type = type?.trim();
       fuel = fuel?.trim();
       transmission = transmission?.trim();
+      status = status?.trim();
 
-      // 🔥 FIX "undefined" STRING BUG (VERY IMPORTANT)
+      //  DEFAULT VALUES (fix undefined bug)
       if (!type || type === "undefined") type = "SUV";
       if (!fuel || fuel === "undefined") fuel = "Petrol";
       if (!transmission || transmission === "undefined") transmission = "Manual";
       if (!status || status === "undefined") status = "available";
 
-      // 🔥 NUMBER FIX
+      //  NUMBER CONVERSION
       seats = parseInt(seats) || 4;
       price_per_day = parseFloat(price_per_day) || 0;
 
-      // 🔥 FORCE LOWERCASE STATUS
+      //  FORCE LOWERCASE STATUS
       status = status.toLowerCase();
 
+      //  FILES
       const carImage = req.files?.car_image?.[0]?.filename || null;
       const rcBook = req.files?.rc_book?.[0]?.filename || null;
 
-      // 🔥 VALIDATION
+      //  BASIC VALIDATION
       if (!reg_number || !name) {
         return res.status(400).json({
           message: "Car name and registration number are required",
         });
       }
 
-      const [existing] = await pool.query(
-        "SELECT * FROM cars WHERE reg_number=?",
-        [reg_number]
-      );
+      //  REGISTRATION NUMBER VALIDATION (🔥 IMPORTANT)
+      const regPattern = /^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$/;
 
-      if (existing.length > 0) {
-        return res.status(400).json({ message: "Car already exists" });
+      if (!regPattern.test(reg_number)) {
+        return res.status(400).json({
+          message: "Invalid registration format (Example: KL07AB1234)",
+        });
       }
 
-      // 🔥 INSERT CLEAN DATA
+      //  CHECK DUPLICATE
+      const [existing] = await pool.query(
+          "SELECT * FROM cars WHERE reg_number = ?",
+          [reg_number]
+        );
+
+        if (existing.length > 0) {
+          return res.status(400).json({
+            message: "Car already exists",
+          });
+        }
+
+      //  INSERT DATA
       await pool.query(
         `INSERT INTO cars
         (owner_id, reg_number, name, type, fuel, transmission, seats, price_per_day, status, image, rc_book)
@@ -788,11 +801,15 @@ app.post(
         ]
       );
 
-      res.json({ message: "Car added successfully" });
+      res.status(201).json({
+        message: "Car added successfully",
+      });
 
     } catch (err) {
       console.error("ADD CAR ERROR:", err);
-      res.status(500).json({ message: "Server error" });
+      res.status(500).json({
+        message: "Server error",
+      });
     }
   }
 );
@@ -802,7 +819,7 @@ app.post(
 
 app.get("/api/view/owner/cars", verifyToken, async (req, res) => {
   try {
-    console.log("USER ID:", req.userid); // ✅ correct debug
+    console.log("USER ID:", req.userid); // 
 
     const ownerId = req.userid;
 
@@ -852,14 +869,14 @@ app.delete("/delete-car/:id", verifyToken, async (req, res) => {
   try {
     const carId = req.params.id;
 
-    // 🔍 Check booking status
+    //  Check booking status
     const [bookings] = await pool.query(
       `SELECT * FROM bookings 
        WHERE car_id = ? AND status IN ('pending','accepted')`,
       [carId]
     );
 
-    // ❌ If booked or pending → block delete
+    //  If booked or pending → block delete
     if (bookings.length > 0) {
       return res.status(400).json({
         message: "Car is booked. Cannot delete."

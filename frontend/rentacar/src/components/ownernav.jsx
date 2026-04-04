@@ -6,9 +6,11 @@ function Ownernav() {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogoutClick = () => {
-    setShowSnackbar(true);
-  };
+  const handleLogoutClick = (e) => {
+  e.preventDefault();
+  console.log("Logout clicked"); //  check this
+  setShowSnackbar(true);
+};
 
   const handleConfirm = () => {
     setShowSnackbar(false);

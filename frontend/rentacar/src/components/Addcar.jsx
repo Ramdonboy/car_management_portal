@@ -19,6 +19,11 @@ const [RcBook,setRcBook] = useState(null);
 /* handle text inputs */
 
 const handleChange = (e)=>{
+    let value = e.target.value;
+
+  if (e.target.name === "reg_number") {
+    value = value.toUpperCase();
+  }
 setCar({...car,[e.target.name]:e.target.value});
 };
 
@@ -94,9 +99,13 @@ onChange={handleChange}
 />
 
 <input
-name="reg_number"
-placeholder="register number"
-onChange={handleChange}
+  name="reg_number"
+  placeholder="Register Number (e.g. KL07AB1234)"
+  value={car.reg_number}
+  onChange={handleChange}
+  pattern="^[A-Za-z]{2}[0-9]{2}[A-Za-z]{2}[0-9]{4}$"
+  title="Format: KL07AB1234"
+  required
 />
 
 <input
