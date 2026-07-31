@@ -27,8 +27,10 @@ font-weight:bold;
 
 .cars-grid{
 display:grid;
+margin-top: 30px;
 grid-template-columns:repeat(3,2fr);
 gap:10px;
+border: black;
 }
 
 /* Car Card */

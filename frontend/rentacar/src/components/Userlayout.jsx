@@ -5,7 +5,7 @@ function Userlayout() {
   return (
     <>
       <Usernavbar />
-      <div style={{ padding: "20px" }}>
+      <div style={{ }}>
         <Outlet />
       </div>
     </>

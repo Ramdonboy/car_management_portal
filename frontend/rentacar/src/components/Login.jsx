@@ -65,7 +65,7 @@ function Login() {
         Welcome back! Please login to continue
       </p>
 
-      <div className="login-card">
+      <div className="login-card" bg>
         <h2>Login</h2>
         <p className="card-subtitle">
           Enter your credentials to access your account

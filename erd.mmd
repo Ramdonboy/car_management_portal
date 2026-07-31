@@ -1,0 +1,52 @@
+erDiagram
+    users {
+        int id PK
+        varchar name
+        varchar email
+        varchar phone
+        varchar password
+        enum role "admin, owner, user"
+        enum status "pending, approved, rejected"
+        timestamp created_at
+    }
+
+    owners {
+        int id PK
+        int owner_id FK
+        varchar address
+        varchar license_image
+    }
+
+    cars {
+        int car_id PK
+        int owner_id FK
+        varchar reg_number
+        varchar name
+        varchar type
+        varchar fuel
+        varchar transmission
+        int seats
+        decimal price_per_day
+        enum status "available, rented, maintenance"
+        varchar image_
+        varchar rc_book
+        timestamp created_at
+    }
+
+    bookings {
+        int booking_id PK
+        int user_id FK
+        int car_id FK
+        int owner_id FK
+        date pickup_date
+        date return_date
+        decimal total_price
+        enum status "pending, approved, rejected, completed"
+        timestamp created_at
+    }
+
+    users ||--o| owners : "has profile"
+    users ||--o{ cars : "lists"
+    users ||--o{ bookings : "places"
+    cars ||--o{ bookings : "is reserved in"
+    users ||--o{ bookings : "receives"

@@ -45,7 +45,7 @@ const Revenue = () => {
     }
   };
 
-  // 📊 CHART DATA
+  //  CHART DATA
   const chartData = {
     labels: data.monthlyRevenue.map((m) => m.month),
     datasets: [
@@ -72,7 +72,7 @@ const Revenue = () => {
     <div className="revenue-page">
       <h2>Revenue Analytics</h2>
 
-      {/* ✅ STATS */}
+      {/*  STATS */}
       <div className="stats">
         <div className="card">
           <h3>₹{Number(data.totalRevenue).toLocaleString()}</h3>
@@ -90,12 +90,12 @@ const Revenue = () => {
         </div>
       </div>
 
-      {/* 📊 CHART */}
+      {/*  CHART */}
       <div className="chart-container">
         <Line data={chartData} options={chartOptions} />
       </div>
 
-      {/* 📋 TABLE */}
+      {/*  TABLE */}
       <div className="table">
         <h3>Monthly Revenue</h3>
 

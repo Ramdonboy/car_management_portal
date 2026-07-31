@@ -48,7 +48,7 @@ function Userbookinghistory() {
   return (
     <div className="container">
 
-      <h2>My Bookings</h2>
+      
 
       {bookings.length === 0 ? (
         <p>No bookings found</p>

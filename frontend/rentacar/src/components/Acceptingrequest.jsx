@@ -5,7 +5,7 @@ function Acceptingrequest() {
 
   const [requests, setRequests] = useState([]);
 
-  /* ✅ Fetch booking requests from backend */
+  /*  Fetch booking requests from backend */
   useEffect(() => {
     fetchRequests();
   }, []);
@@ -28,7 +28,7 @@ function Acceptingrequest() {
     }
   };
 
-  /* ✅ Accept booking */
+  /*  Accept booking */
   const handleAccept = async (id) => {
     const token = localStorage.getItem("token");
 
@@ -44,7 +44,7 @@ function Acceptingrequest() {
     fetchRequests(); // refresh data
   };
 
-  /* ✅ Reject booking */
+  /*  Reject booking */
   const handleReject = async (id) => {
     const token = localStorage.getItem("token");
 
@@ -71,11 +71,13 @@ function Acceptingrequest() {
               <th>ID</th>
               <th>User</th>
               <th>Car</th>
+              <th>Phone_no</th>
               <th>Pickup</th>
               <th>Return</th>
               <th>Total</th>
               <th>Status</th>
               <th>Action</th>
+              
             </tr>
           </thead>
 
@@ -90,9 +92,11 @@ function Acceptingrequest() {
                   <td>{req.booking_id}</td>
                   <td>{req.user_name}</td>
                   <td>{req.car_name}</td>
+                  <td>{req.phone_no}</td>
                   <td>{req.pickup_date}</td>
                   <td>{req.return_date}</td>
                   <td>₹{req.total_price}</td>
+
 
                   <td className={req.status}>
                     {req.status}

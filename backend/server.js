@@ -246,30 +246,40 @@ if (user.role === "owner") {
 // -------- ADMIN REVENUE ANALYTICS --------
 app.get("/api/admin/revenue", async (req, res) => {
   try {
+    //  TOTAL REVENUE
     const [total] = await pool.query(`
       SELECT COALESCE(SUM(total_price),0) AS totalRevenue
       FROM bookings
-      WHERE status IN ('completed','approved')
+      WHERE status IN ('completed','approved','accepted')
     `);
 
+    //  MONTHLY REVENUE
     const [monthly] = await pool.query(`
       SELECT 
         DATE_FORMAT(pickup_date, '%Y-%m') AS month,
         COALESCE(SUM(total_price),0) AS revenue
       FROM bookings
-      WHERE status IN ('completed','approved')
+      WHERE status IN ('completed','approved','accepted')
       GROUP BY month
       ORDER BY month ASC
     `);
 
+    //  TOTAL BOOKINGS COUNT (FIXED)
+    const [count] = await pool.query(`
+      SELECT COUNT(*) AS totalBookings
+      FROM bookings
+      WHERE status IN ('completed','approved','accepted')
+    `);
+
+    //  RESPONSE
     res.json({
       totalRevenue: total[0].totalRevenue,
       monthlyRevenue: monthly,
-      totalBookings: monthly.length
+      totalBookings: count[0].totalBookings
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("REVENUE ERROR:", err);
     res.status(500).json({ message: "Error fetching revenue" });
   }
 });
@@ -519,10 +529,12 @@ app.post("/api/book-car", verifyToken, async (req, res) => {
 // ---------Owner View Bookings----------
 app.get("/api/owner/bookings", verifyToken, async (req, res) => {
   try {
+
+
     const ownerId = req.userid;
 
     const [rows] = await pool.query(
-      `SELECT b.*, u.name AS user_name, c.name AS car_name
+      `SELECT b.*, u.name AS user_name, u.phone AS phone_no, c.name AS car_name
        FROM bookings b
        JOIN users u ON b.user_id = u.id
        JOIN cars c ON b.car_id = c.car_id
@@ -675,8 +687,9 @@ app.get("/api/view/car", async (req, res) => {
     const [rows] = await pool.query(`
       SELECT 
         c.*,
+        o.address,   -- get address from owners
 
-        --  REAL-TIME STATUS (VERY IMPORTANT)
+        -- REAL-TIME STATUS
         CASE 
           WHEN EXISTS (
             SELECT 1 FROM bookings b
@@ -689,7 +702,10 @@ app.get("/api/view/car", async (req, res) => {
 
       FROM cars c
 
-      --  HIDE DELETED CARS
+      -- JOIN owners table
+      JOIN owners o ON c.owner_id = o.owner_id
+
+      -- HIDE DELETED CARS
       WHERE c.is_deleted = FALSE
 
       ORDER BY c.car_id DESC

@@ -15,7 +15,7 @@ const Bookings = () => {
       const res = await fetch("http://localhost:5000/api/admin/bookings");
       const data = await res.json();
 
-      console.log("BOOKINGS:", data); // debug
+      
 
       setBookings(data);
     } catch (err) {
@@ -42,7 +42,7 @@ const Bookings = () => {
         <h2>Booking Management</h2>
         <p className="subtitle">Monitor and manage all rental bookings</p>
 
-        {/* ✅ STATS */}
+        {/*  STATS */}
         <div className="stats">
           <div className="stat-card">
             <h3>{bookings.length}</h3>
@@ -71,7 +71,7 @@ const Bookings = () => {
           </div>
         </div>
 
-        {/* ✅ SEARCH + FILTER */}
+        {/*  SEARCH + FILTER */}
         <div className="filters">
           <input
             type="text"
@@ -88,7 +88,7 @@ const Bookings = () => {
           </select>
         </div>
 
-        {/* ✅ TABLE */}
+        {/*  TABLE */}
         <div className="table-wrapper">
           <h4>All Bookings ({filteredBookings.length})</h4>
 

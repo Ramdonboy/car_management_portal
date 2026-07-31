@@ -38,6 +38,7 @@ useEffect(() => {
             />
 
             <h3>{car.name}</h3>
+            <p>{car.address}</p>
             <p>₹{car.price_per_day}/day</p>
 
             {/* UPDATED BUTTON LOGIC */}

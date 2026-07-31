@@ -2,6 +2,7 @@
 .revenue-page {
   padding: 30px;
   min-height: 100vh;
+  margin-top: 80px;
   background: linear-gradient(135deg, #eef2ff, #f8fafc);
   font-family: "Inter", sans-serif;
 }

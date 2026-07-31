@@ -47,3 +47,11 @@
 .cancel-btn:hover {
   background: darkred;
 }
+.container .h2{
+  text-align: center;
+  margin-top: auto;
+}
+.container {
+  margin-top: 60px;   /* adjust based on navbar height */
+  padding: 20px;
+}

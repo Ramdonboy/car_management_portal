@@ -1,9 +1,12 @@
 .cars-container {
-  padding: 20px;
+  padding: 40px;
+  font-weight: 600;
+  font-size: 33px; 
 }
 
 h1 {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  font-size: 33px;
 }
 
 .search-bar {

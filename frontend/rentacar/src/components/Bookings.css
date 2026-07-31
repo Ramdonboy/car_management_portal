@@ -4,11 +4,13 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
+  font-size:large;
 }
 
-/* 🌌 PAGE */
+
 .bookings-page {
   background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  font-size: 33px;
   min-height: 100vh;
 }
 
@@ -27,7 +29,7 @@
 /* LOGO */
 .logo {
   font-weight: 700;
-  font-size: 18px;
+  font-size: 600;
   color: #111827;
 }
 
@@ -37,7 +39,7 @@
 
 .logo small {
   margin-left: 6px;
-  font-size: 12px;
+  font-size: 200;
   color: #6b7280;
 }
 
@@ -77,13 +79,20 @@
 }
 
 /* 📦 CONTENT */
-.content {
-  padding: 30px;
+.content h2 {
+  font-size: 33px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #090909, #000308);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-  color: #6b7280;
+  color: #3d3f44;
+  font-size: 15px;
+  font-weight: 500;
   margin-top: 5px;
+  ;
 }
 
 /* 📊 STATS */
@@ -161,7 +170,9 @@
   font-weight: 600;
 }
 
-/* TABLE */
+.empty{
+  margin-top: 20;
+}
 table {
   width: 100%;
   border-collapse: collapse;

@@ -19,7 +19,7 @@ function MyCars() {
 
         const data = await res.json();
 
-        // ✅ FIX: prevent crash
+        //  FIX: prevent crash
         if (Array.isArray(data)) {
           setCars(data);
         } else {

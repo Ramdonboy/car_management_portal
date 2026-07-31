@@ -5,7 +5,7 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="home-root">
+    <div className="home-root" >
       {/* Top Navigation */}
       <header className="home-header">
         <div className="brand-name">speedo</div>
@@ -13,7 +13,7 @@ function Home() {
         <nav className="header-links">
           <span onClick={() => navigate("/login")}>Cars</span>
           <span onClick={() => navigate("/login")}>Login</span>
-          <button onClick={() => navigate("/register")}>Register</button>
+          <span className="harry" onClick={() => navigate("/register")}>Register</span>
         </nav>
       </header>
 
