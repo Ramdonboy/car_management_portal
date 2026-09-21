@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
-import "./Userbookhistory.css";
+import { useEffect, useState } from "react";import { API_BASE_URL, UPLOADS_BASE_URL } from "../apiConfig";import "./Userbookhistory.css";
 
 function Userbookinghistory() {
 
   const [bookings, setBookings] = useState([]);
 
   /*  MOVE THIS OUTSIDE useEffect */
-  const fetchBookings = async () => {
+  async function fetchBookings() {
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:5000/api/user/bookings", {
+    const res = await fetch(`${API_BASE_URL}/api/user/bookings`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -17,7 +16,7 @@ function Userbookinghistory() {
 
     const data = await res.json();
     setBookings(data);
-  };
+  }
 
   useEffect(() => {
     fetchBookings();
@@ -30,7 +29,7 @@ function Userbookinghistory() {
     if (!window.confirm("Are you sure to cancel booking?")) return;
 
     const res = await fetch(
-      `http://localhost:5000/api/booking/cancel/${id}`,
+      `${API_BASE_URL}/api/booking/cancel/${id}`,
       {
         method: "PUT",
         headers: {
@@ -59,7 +58,7 @@ function Userbookinghistory() {
             <div className="booking-card" key={b.booking_id}>
 
               <img
-                src={`http://localhost:5000/uploads/car_image/${b.image}`}
+                src={`${UPLOADS_BASE_URL}/car_image/${b.image}`}
                 alt={b.car_name}
               />
 

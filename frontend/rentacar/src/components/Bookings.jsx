@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react";
-import "./Bookings.css";
+import { useEffect, useState } from "react";import { API_BASE_URL } from "../apiConfig";import "./Bookings.css";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
 
-  useEffect(() => {
-    fetchBookings();
-  }, []);
-
-  const fetchBookings = async () => {
+  async function fetchBookings() {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/bookings");
+      const res = await fetch(`${API_BASE_URL}/api/admin/bookings`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const data = await res.json();
 
       
@@ -21,7 +20,11 @@ const Bookings = () => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchBookings();
+  }, []);
 
   //  FILTER + SEARCH
   const filteredBookings = bookings.filter((b) => {

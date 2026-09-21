@@ -1,5 +1,6 @@
 // MyProfile.jsx
 import React, { useState, useEffect } from "react";
+import { API_BASE_URL } from "../apiConfig";
 import "./MyProfile.css";
 
 const MyProfile = () => {
@@ -25,7 +26,7 @@ const MyProfile = () => {
     return;
   }
 
-  fetch("http://localhost:5000/api/profile", {
+  fetch(`${API_BASE_URL}/api/profile`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`
@@ -77,7 +78,7 @@ const MyProfile = () => {
 
   try {
 
-    const response = await fetch("http://localhost:5000/api/updateprofile", {
+    const response = await fetch(`${API_BASE_URL}/api/updateprofile`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

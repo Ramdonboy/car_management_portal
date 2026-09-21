@@ -1,31 +1,35 @@
-import { useEffect, useState } from "react";
-import "./ownersrequest.css";
+import { useEffect, useState } from "react";import { API_BASE_URL } from "../apiConfig";import "./ownersrequest.css";
 
 function OwnerRequest() {
   const [requests, setRequests] = useState([]);
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  const fetchRequests = async () => {
+  async function fetchRequests() {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/owner-requests");
+      const res = await fetch(`${API_BASE_URL}/api/admin/owner-requests`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const data = await res.json();
       setRequests(data);
     } catch (error) {
       console.error("Fetch error:", error);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchRequests();
+  }, []);
 
   const updateStatus = async (id, status) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/admin/update-owner-status/${id}`,
+        `${API_BASE_URL}/api/admin/update-owner-status/${id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({ status }),
         }

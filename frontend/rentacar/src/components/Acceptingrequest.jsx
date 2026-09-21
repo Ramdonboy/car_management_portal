@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../apiConfig";
 import "./acceptingrequest.css";
 
 function Acceptingrequest() {
 
   const [requests, setRequests] = useState([]);
 
-  /*  Fetch booking requests from backend */
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  const fetchRequests = async () => {
+  async function fetchRequests() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:5000/api/owner/bookings", {
+      const res = await fetch(`${API_BASE_URL}/api/owner/bookings`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -26,13 +22,17 @@ function Acceptingrequest() {
     } catch (err) {
       console.error("Error fetching requests", err);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchRequests();
+  }, []);
 
   /*  Accept booking */
   const handleAccept = async (id) => {
     const token = localStorage.getItem("token");
 
-    await fetch(`http://localhost:5000/api/booking/status/${id}`, {
+    await fetch(`${API_BASE_URL}/api/booking/status/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ function Acceptingrequest() {
   const handleReject = async (id) => {
     const token = localStorage.getItem("token");
 
-    await fetch(`http://localhost:5000/api/booking/status/${id}`, {
+    await fetch(`${API_BASE_URL}/api/booking/status/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

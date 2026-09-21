@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { API_BASE_URL, UPLOADS_BASE_URL } from "../apiConfig";
 import "./Bookingpage.css";
 
 function BookingPage() {
@@ -44,7 +45,7 @@ function BookingPage() {
 
   const token = localStorage.getItem("token");
 
-  const res = await fetch("http://localhost:5000/api/book-car", {
+  const res = await fetch(`${API_BASE_URL}/api/book-car`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -76,7 +77,7 @@ function BookingPage() {
         <h2>Booking Details</h2>
 
         <img
-  src={`http://localhost:5000/uploads/car_image/${car.image}`}
+  src={`${UPLOADS_BASE_URL}/car_image/${car.image}`}
   alt={car.name}
 />
 

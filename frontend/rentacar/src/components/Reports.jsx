@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { API_BASE_URL } from "../apiConfig";
 import "./reports.css";
 
 // Register chart
@@ -30,20 +31,24 @@ const Revenue = () => {
     totalBookings: 0,
   });
 
-  useEffect(() => {
-    fetchRevenue();
-  }, []);
-
-  const fetchRevenue = async () => {
+  async function fetchRevenue() {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/revenue");
+      const res = await fetch(`${API_BASE_URL}/api/admin/revenue`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const result = await res.json();
 
       setData(result);
     } catch (err) {
       console.error(err);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchRevenue();
+  }, []);
 
   //  CHART DATA
   const chartData = {

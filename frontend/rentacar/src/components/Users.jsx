@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { API_BASE_URL } from "../apiConfig";
 import "./users.css";
 
 function UsersPage() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   // ✅ FETCH USERS
-  const fetchUsers = async () => {
+  async function fetchUsers() {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/users");
+      const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const data = await res.json();
 
       console.log("FRONTEND DATA:", data);
@@ -21,15 +22,20 @@ function UsersPage() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   // ✅ UPDATE STATUS (ADMIN CONTROL)
   const updateStatus = async (id, status) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/user-status/${id}`, {
+      await fetch(`${API_BASE_URL}/api/admin/user-status/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ status }),
       });

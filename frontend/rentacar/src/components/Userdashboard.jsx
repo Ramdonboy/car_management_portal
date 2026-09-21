@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL, UPLOADS_BASE_URL } from "../apiConfig";
 import "./User.css";
 
 function CarsBooking() {
   const navigate = useNavigate();
 
   const [cars, setCars] = useState([]);
-  const [selectedCar, setSelectedCar] = useState(null);
 
 useEffect(() => {
   const fetchCars = () => {
-    fetch("http://localhost:5000/api/view/car")
+    fetch(`${API_BASE_URL}/api/view/car`)
       .then((res) => res.json())
       .then((data) => setCars(data));
   };
@@ -32,9 +32,8 @@ useEffect(() => {
           <div className="car-card" key={car.car_id}>
 
             <img
-              src={`http://localhost:5000/uploads/car_image/${car.image}`}
+              src={`${UPLOADS_BASE_URL}/car_image/${car.image}`}
               alt={car.name}
-              onClick={() => setSelectedCar(car)}
             />
 
             <h3>{car.name}</h3>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_BASE_URL } from "../apiConfig";
 import "./addcar.css";
 
 function AddCar(){
@@ -24,7 +25,7 @@ const handleChange = (e)=>{
   if (e.target.name === "reg_number") {
     value = value.toUpperCase();
   }
-setCar({...car,[e.target.name]:e.target.value});
+ setCar({...car,[e.target.name]:value});
 };
 
 /* handle image */
@@ -55,7 +56,7 @@ formData.append("price_per_day",car.price_per_day);
 formData.append("reg_number",car.reg_number);
 formData.append("car_image",image);
 formData.append("rc_book",RcBook);
-const response = await fetch("http://localhost:5000/api/add/car",{
+const response = await fetch(`${API_BASE_URL}/api/add/car`,{
 
 method:"POST",
 headers:{

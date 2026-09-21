@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE_URL, UPLOADS_BASE_URL } from "../apiConfig";
 import "./Cars.css";
 
 function Cars() {
   const [cars, setCars] = useState([]);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    fetchCars();
-  }, []);
-
-  const fetchCars = async () => {
+  async function fetchCars() {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/cars", {
+      const res = await axios.get(`${API_BASE_URL}/api/admin/cars`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -21,11 +18,15 @@ function Cars() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }
+
+  useEffect(() => {
+    fetchCars();
+  }, []);
 
   const deleteCar = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/delete-car/${id}`, {
+      await axios.delete(`${API_BASE_URL}/delete-car/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -72,7 +73,7 @@ function Cars() {
               <tr key={car.car_id}>
                 <td className="car-cell">
                   <img
-                    src={`http://localhost:5000/uploads/car_image/${car.image}`}
+                    src={`${UPLOADS_BASE_URL}/car_image/${car.image}`}
                     alt={car.name}
                   />
                   <div>

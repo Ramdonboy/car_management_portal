@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { API_BASE_URL } from "../apiConfig";
 import "./register.css";
 
 function Register() {
@@ -76,7 +77,7 @@ function Register() {
     // ---------------- USER REGISTER ----------------
     if (role === "user") {
 
-      response = await fetch("http://localhost:5000/api/register", {
+      response = await fetch(`${API_BASE_URL}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -104,7 +105,7 @@ function Register() {
       formData.append("password", form.password);
       formData.append("license", form.license);
 
-      response = await fetch("http://localhost:5000/api/register/owner", {
+      response = await fetch(`${API_BASE_URL}/api/register/owner`, {
         method: "POST",
         body: formData
       });
@@ -118,7 +119,7 @@ function Register() {
       navigate("/login");
     }
 
-  } catch (error) {
+  } catch {
     alert("Backend server not running");
   }
 };

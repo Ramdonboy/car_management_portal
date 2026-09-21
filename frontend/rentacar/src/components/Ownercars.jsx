@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_BASE_URL, UPLOADS_BASE_URL } from "../apiConfig";
 import "./ownercars.css";
 
 function MyCars() {
@@ -11,7 +12,7 @@ function MyCars() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:5000/api/view/owner/cars", {
+        const res = await fetch(`${API_BASE_URL}/api/view/owner/cars`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -40,7 +41,7 @@ function MyCars() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`http://localhost:5000/delete-car/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/delete-car/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`
@@ -65,7 +66,7 @@ function MyCars() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`http://localhost:5000/update-car/${car.car_id}`, {
+      const res = await fetch(`${API_BASE_URL}/update-car/${car.car_id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -123,7 +124,7 @@ function MyCars() {
           <div className="car-card" key={car.car_id}>
 
             <img
-              src={`http://localhost:5000/uploads/car_image/${car.image}`}
+              src={`${UPLOADS_BASE_URL}/car_image/${car.image}`}
               alt="car"
             />
 
